@@ -18,15 +18,60 @@
 
 package com.macleod2486.magicbuilder;
 
+import java.util.Scanner;
+
 
 public abstract class Magic 
 {
 	public static void main(String args[])
 	{
 		boolean executed;
-		BuildDatabase base = new BuildDatabase();
-		executed=base.standard();
-		if(executed)
-			base.tcg();
+		String selection="";
+		try
+		{
+			Scanner screen = new Scanner(System.in);
+			System.out.printf("Please make your selection\n1)Standard\n2)Extended\n3)Modern\n");
+			selection=screen.next();
+			screen.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		if(selection.equals("1"))
+		{
+			BuildDatabase base = new BuildDatabase();
+			executed=base.standard();
+			if(executed)
+				base.tcg();
+		}
+		else if(selection.equals("2"))
+		{
+			Extended extend = new Extended();
+			executed=extend.extended();
+			if(executed)
+				extend.tcg();
+		}
+		else if(selection.equals("3"))
+		{
+			Modern modern = new Modern();
+			executed=modern.modern();
+			if(executed)
+				modern.tcg();
+		}
+		else if(selection.equals("4"))
+		{
+			/*
+			Legacy legacy = new Legacy();
+			executed=legacy.extended();
+			if(executed)
+				legacy.tcg(); */
+		}
+		else if(selection.equals("5"))
+		{
+			
+		}
+		
 	}
 }
