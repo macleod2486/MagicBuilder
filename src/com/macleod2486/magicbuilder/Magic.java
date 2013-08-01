@@ -41,10 +41,10 @@ public abstract class Magic
 		
 		if(selection.equals("1"))
 		{
-			BuildDatabase base = new BuildDatabase();
-			executed=base.standard();
+			Standard stand = new Standard();
+			executed=stand.standard();
 			if(executed)
-				base.tcg();
+				stand.tcg();
 		}
 		else if(selection.equals("2"))
 		{
@@ -63,6 +63,8 @@ public abstract class Magic
 		else if(selection.equals("4"))
 		{
 			/*
+			 * Haven't quite worked out how to properly parse the info
+			 *  
 			Legacy legacy = new Legacy();
 			executed=legacy.extended();
 			if(executed)
@@ -70,7 +72,7 @@ public abstract class Magic
 		}
 		else if(selection.equals("5"))
 		{
-			
+			//Future place for the Vintage code
 		}
 		
 	}

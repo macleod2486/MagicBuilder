@@ -16,11 +16,15 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
 
-
 package com.macleod2486.magicbuilder;
 
-import java.io.PrintWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,13 +32,12 @@ import org.jsoup.select.Elements;
 
 public class Extended 
 {
-	String standardSets[]=new String[30];
-	String standardNames[]=new String[20];
+	String extendedSets[]=new String[100];
+	String extendedNames[]=new String[400];
 	int pointer=0;
 	int year=0;
 	public void start()
 	{
-		//System.out.println("It works!");
 				try
 				{
 					Document page;
@@ -83,12 +86,19 @@ public class Extended
 	{
 		try
 		{
-			PrintWriter standarddata = new PrintWriter("standard.db");
-			standarddata.write("");
+			int rowNum;
+			
+			//Creates a excel file for the information to be stored
+			HSSFWorkbook extended = new HSSFWorkbook();
+			HSSFSheet setname;
+			Row newRow;
+			Cell info;
+			
 			//Various values to screen the data
 			String clean;
 			String highprice;
 			String mediumPrice;
+			String lowPrice;
 			String highestCard=" ";
 			double high =0;
 			//String color;
@@ -99,31 +109,62 @@ public class Extended
 			//Grabs the modified set values to then be used for the website url format
 			for(int limit=0; limit<this.pointer; limit++)
 			{
-				standarddata.append("\nSet name: "+standardNames[limit]+"\n");
-				System.out.println("\nSet name: "+standardNames[limit]+"\n");
+				rowNum=0;
+				
+				//Creates a new sheet per set
+				setname=extended.createSheet(extendedNames[limit]);
+				//Sets up the initial row in the set
+				newRow = setname.createRow(0);
+				info=newRow.createCell(0);
+				info.setCellValue("Card Name");
+				info=newRow.createCell(1);
+				info.setCellValue("High Price");
+				info=newRow.createCell(2);
+				info.setCellValue("Medium Price");
+				info=newRow.createCell(3);
+				info.setCellValue("Low Price");
+				
+				
+				System.out.println("\nSet name: "+extendedNames[limit]+"\n");
 				//Each modified string value is then put in the following url to then parse
 				//the information from it.
-				page = Jsoup.connect("http://magic.tcgplayer.com/db/price_guide.asp?setname="+standardSets[limit]).get();
+				page = Jsoup.connect("http://magic.tcgplayer.com/db/price_guide.asp?setname="+extendedSets[limit]).get();
 				table = page.select("table").get(2);
 				row=table.select("tr");
+				
 				//Grabs each card that was selected
 				for(Element tableRow: row)
 				{
 					item=tableRow.select("td");
 					clean=item.get(0).text();
+					
 					//Filters out land cards
 					if(!clean.contains("Forest")&&!clean.contains("Mountain")&&!clean.contains("Swamp")&&!clean.contains("Island")&&!clean.contains("Plains"))
 					{
+						newRow = setname.createRow(rowNum+1);
+						
 						//Gets the name of the card
 						clean=clean.substring(1);
+						info=newRow.createCell(0);
+						info.setCellValue(clean);
 						
 						//This gets the high price
 						highprice=item.get(5).text();
 						highprice=highprice.substring(1,highprice.length()-2);
+						info=newRow.createCell(1);
+						info.setCellValue(highprice);
 						
 						//This gets the medium price
 						mediumPrice=item.get(6).text();
 						mediumPrice=mediumPrice.substring(1,mediumPrice.length()-2);
+						info=newRow.createCell(2);
+						info.setCellValue(mediumPrice);
+						
+						//This gets the low price
+						lowPrice=item.get(7).text();
+						lowPrice=lowPrice.substring(1,lowPrice.length()-2);
+						info=newRow.createCell(3);
+						info.setCellValue(lowPrice);
 						
 						//Finds highest card
 						if(high<Double.parseDouble(highprice))
@@ -131,15 +172,11 @@ public class Extended
 							high=Double.parseDouble(highprice);
 							highestCard=clean;
 						}
-						standarddata.append("\n"+clean+" H:$"+highprice+" M:$"+mediumPrice);
 						System.out.println(clean+"  H:$"+highprice+" M:$"+mediumPrice);
+						rowNum++;
 					}
+					
 				}
-				
-				//Write to the file
-				standarddata.append("\n**************************************\n");
-				standarddata.append("Highest Card out of set "+highestCard+" $"+high);
-				standarddata.append("\n**************************************\n");
 				
 				//Displays
 				System.out.println("**************************************");
@@ -150,8 +187,13 @@ public class Extended
 				highestCard="";
 				high=0;
 			}
-			//closes the file
-			standarddata.close();
+			
+			//Writes the workbook to the file and closes it
+			File extendedFile = new File("extended.xls");
+			FileOutputStream extendedOutput = new FileOutputStream(extendedFile);
+			extended.write(extendedOutput);
+			extendedOutput.close();
+			
 			
 		}
 		catch(Exception e)
@@ -178,14 +220,14 @@ public class Extended
 			//Grabs the webpage then selects the list of standard sets
 			Document page = Jsoup.connect("https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrextended").get();
 			Elements article = page.select("div.article-content");
-			Elements table = article.select("ul");
+			Element table = article.select("ul").get(0);
 			Elements list = table.select("li");
 			this.pointer = 0;
 			//Loops through each item within the list of available standard sets
 			for(Element item: list)
 			{
-				standardNames[pointer]=item.text();
-				System.out.println(standardNames[pointer]);
+				extendedNames[pointer]=item.text();
+				System.out.println(extendedNames[pointer]);
 				clean = item.text().replaceAll(" ", "%20");
 				//Further processes the items within found on the site
 				for(int length=0; length<clean.length(); length++)
@@ -201,12 +243,12 @@ public class Extended
 				//Checks to see if the standard set is a core set or not
 				if(clean.matches(".*\\d\\d\\d\\d.*"))
 				{
-					standardSets[pointer]=coreSet(clean);
+					extendedSets[pointer]=coreSet(clean);
 					
 				}
 				else
 				{
-					standardSets[pointer]=clean;
+					extendedSets[pointer]=clean;
 				}
 				
 				this.pointer++;

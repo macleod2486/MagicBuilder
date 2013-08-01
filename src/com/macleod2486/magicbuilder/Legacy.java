@@ -11,8 +11,8 @@ public class Legacy
 {
 
 	//
-	private String standardSets[]=new String[100];
-	private String standardNames[]=new String[300];
+	private String legacySets[]=new String[100];
+	private String legacyNames[]=new String[300];
 	int pointer=0;
 	int year=0;
 	public void start()
@@ -82,11 +82,11 @@ public class Legacy
 			//Grabs the modified set values to then be used for the website url format
 			for(int limit=0; limit<this.pointer; limit++)
 			{
-				standarddata.append("\nSet name: "+standardNames[limit]+"\n");
-				System.out.println("\nSet name: "+standardNames[limit]+"\n");
+				standarddata.append("\nSet name: "+legacyNames[limit]+"\n");
+				System.out.println("\nSet name: "+legacyNames[limit]+"\n");
 				//Each modified string value is then put in the following url to then parse
 				//the information from it.
-				page = Jsoup.connect("http://magic.tcgplayer.com/db/price_guide.asp?setname="+standardSets[limit]).get();
+				page = Jsoup.connect("http://magic.tcgplayer.com/db/price_guide.asp?setname="+legacySets[limit]).get();
 				table = page.select("table").get(2);
 				row=table.select("tr");
 				//Grabs each card that was selected
@@ -152,7 +152,7 @@ public class Legacy
 		
 	}
 
-	public boolean extended()
+	public boolean legacy()
 	{
 		String clean;
 		char check;
@@ -167,8 +167,8 @@ public class Legacy
 			//Loops through each item within the list of available standard sets
 			for(Element item: list)
 			{
-				standardNames[pointer]=item.text();
-				System.out.println(standardNames[pointer]);
+				legacyNames[pointer]=item.text();
+				System.out.println(legacyNames[pointer]);
 				clean = item.text().replaceAll(" ", "%20");
 				//Further processes the items within found on the site
 				for(int length=0; length<clean.length(); length++)
@@ -184,12 +184,12 @@ public class Legacy
 				//Checks to see if the standard set is a core set or not
 				if(clean.matches(".*\\d\\d\\d\\d.*"))
 				{
-					standardSets[pointer]=coreSet(clean);
+					legacySets[pointer]=coreSet(clean);
 					
 				}
 				else
 				{
-					standardSets[pointer]=clean;
+					legacySets[pointer]=clean;
 				}
 				
 				this.pointer++;
