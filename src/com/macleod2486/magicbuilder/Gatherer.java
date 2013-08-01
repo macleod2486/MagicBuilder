@@ -1,5 +1,5 @@
-/*    Magic Builder
- * 	  A simple java program that grabs the latest prices and displays them per set.
+/*  Magic Builder
+ * 	A simple java program that grabs the latest prices and displays them per set.
     Copyright (C) 2013  Manuel Gonzales Jr.
 
     This program is free software: you can redistribute it and/or modify
@@ -30,66 +30,28 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class Extended 
+public class Gatherer 
 {
-	String extendedSets[]=new String[100];
-	String extendedNames[]=new String[400];
+	String Sets[]=new String[40];
+	String Names[]=new String[40];
+	
+	//Urls of each of the different formats from the Wizards website
+	String structuredFormat[]={"https://www.wizards.com/magic/magazine/article.aspx?x=judge/resources/sfrstandard",
+							   "https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrextended",
+							   "https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrmodern"};
 	int pointer=0;
 	int year=0;
-	public void start()
-	{
-				try
-				{
-					Document page;
-					Elements table;
-					Elements cards;
-					String copy;
-					for(int pages=0; pages<100; pages++)
-					{
-						System.out.println("***********"+pages+"**************");
-						page = Jsoup.connect("http://gatherer.wizards.com/Pages/Search/Default.aspx?page="+pages+"&format=%5BStandard%5D").get();
-						//System.out.println("Page "+page.text());
-						table = page.select("table.cardItemTable");
-						cards = table.select("span.cardTitle");
-						copy=cards.first().text();
-
-						for(Element found : cards)
-						{
-							if(copy==found.text())
-							{
-								break;
-							}
-							
-							if(!found.text().contains("Mountain")&&!found.text().contains("Island")&&!found.text().contains("Swamp")&&!found.text().contains("Forest")&&!found.text().contains("Plains"))
-							{
-								System.out.println("Found "+found.text());
-							}
-						}
-						
-					} 
-					
-					//page = Jsoup.connect("http://magic.tcgplayer.com/db/price_guide.asp?setname=innistrad").get();
-					//table=page.select(cssQuery)
-					
-					
-				}
-				
-				catch(Exception e)
-				{
-					
-					System.out.println("Error! "+e);
-				}
-
-	}
-
+	
+	//Connects to the TCG website to then gather the prices
 	public void tcg()
 	{
 		try
 		{
+			//Keeps track of the rows within the sheet as data is being written
 			int rowNum;
 			
 			//Creates a excel file for the information to be stored
-			HSSFWorkbook extended = new HSSFWorkbook();
+			HSSFWorkbook standard = new HSSFWorkbook();
 			HSSFSheet setname;
 			Row newRow;
 			Cell info;
@@ -99,21 +61,30 @@ public class Extended
 			String highprice;
 			String mediumPrice;
 			String lowPrice;
+			
 			String highestCard=" ";
 			double high =0;
-			//String color;
+			
+			//Variables to take in information
 			Document page;
 			Element table;
 			Elements row;
 			Elements item;
-			//Grabs the modified set values to then be used for the website url format
+			
+			/*
+			 * Grabs the modified set values to then be used for the website url format
+			 * Not the most effecient for loop but will be modified as time goes on.
+			 */
 			for(int limit=0; limit<this.pointer; limit++)
 			{
 				rowNum=0;
 				
+				System.out.println("\nSet name: "+Names[limit]+"\n");
+				
 				//Creates a new sheet per set
-				setname=extended.createSheet(extendedNames[limit]);
-				//Sets up the initial row in the set
+				setname=standard.createSheet(Names[limit]);
+				
+				//Sets up the initial row in the sheet
 				newRow = setname.createRow(0);
 				info=newRow.createCell(0);
 				info.setCellValue("Card Name");
@@ -124,23 +95,26 @@ public class Extended
 				info=newRow.createCell(3);
 				info.setCellValue("Low Price");
 				
+				/*Each modified string value is then put in the following url to then parse
+				  the information from it. */
 				
-				System.out.println("\nSet name: "+extendedNames[limit]+"\n");
-				//Each modified string value is then put in the following url to then parse
-				//the information from it.
-				page = Jsoup.connect("http://magic.tcgplayer.com/db/price_guide.asp?setname="+extendedSets[limit]).get();
+				page = Jsoup.connect("http://magic.tcgplayer.com/db/price_guide.asp?setname="+Sets[limit]).get();
 				table = page.select("table").get(2);
 				row=table.select("tr");
 				
 				//Grabs each card that was selected
 				for(Element tableRow: row)
 				{
+					//Gets the first row 
 					item=tableRow.select("td");
 					clean=item.get(0).text();
+					
+					
 					
 					//Filters out land cards
 					if(!clean.contains("Forest")&&!clean.contains("Mountain")&&!clean.contains("Swamp")&&!clean.contains("Island")&&!clean.contains("Plains"))
 					{
+						//Creates new row in the sheet
 						newRow = setname.createRow(rowNum+1);
 						
 						//Gets the name of the card
@@ -161,17 +135,18 @@ public class Extended
 						info.setCellValue(mediumPrice);
 						
 						//This gets the low price
-						lowPrice=item.get(7).text();
-						lowPrice=lowPrice.substring(1,lowPrice.length()-2);
+						lowPrice = item.get(7).text();
+						lowPrice = lowPrice.substring(1,lowPrice.length()-2);
 						info=newRow.createCell(3);
 						info.setCellValue(lowPrice);
 						
-						//Finds highest card
+						//Finds highest card using the high price
 						if(high<Double.parseDouble(highprice))
 						{	
 							high=Double.parseDouble(highprice);
 							highestCard=clean;
 						}
+						
 						System.out.println(clean+"  H:$"+highprice+" M:$"+mediumPrice);
 						rowNum++;
 					}
@@ -189,13 +164,13 @@ public class Extended
 			}
 			
 			//Writes the workbook to the file and closes it
-			File extendedFile = new File("extended.xls");
-			FileOutputStream extendedOutput = new FileOutputStream(extendedFile);
-			extended.write(extendedOutput);
-			extendedOutput.close();
-			
+			File standardFile = new File("Structured.xls");
+			FileOutputStream standardOutput = new FileOutputStream(standardFile);
+			standard.write(standardOutput);
+			standardOutput.close();
 			
 		}
+	
 		catch(Exception e)
 		{
 			System.out.println("Error! "+e);
@@ -211,14 +186,15 @@ public class Extended
 		
 	}
 
-	public boolean extended()
+	public boolean gather(int selection)
 	{
 		String clean;
 		char check;
+		
 		try
 		{
 			//Grabs the webpage then selects the list of standard sets
-			Document page = Jsoup.connect("https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrextended").get();
+			Document page = Jsoup.connect(structuredFormat[selection]).get();
 			Elements article = page.select("div.article-content");
 			Element table = article.select("ul").get(0);
 			Elements list = table.select("li");
@@ -226,9 +202,10 @@ public class Extended
 			//Loops through each item within the list of available standard sets
 			for(Element item: list)
 			{
-				extendedNames[pointer]=item.text();
-				System.out.println(extendedNames[pointer]);
+				Names[pointer]=item.text();
+				System.out.println(Names[pointer]);
 				clean = item.text().replaceAll(" ", "%20");
+				
 				//Further processes the items within found on the site
 				for(int length=0; length<clean.length(); length++)
 				{
@@ -239,16 +216,15 @@ public class Extended
 					}
 				}
 				
-				//System.out.println(clean);
 				//Checks to see if the standard set is a core set or not
 				if(clean.matches(".*\\d\\d\\d\\d.*"))
 				{
-					extendedSets[pointer]=coreSet(clean);
+					Sets[pointer]=coreSet(clean);
 					
 				}
 				else
 				{
-					extendedSets[pointer]=clean;
+					Sets[pointer]=clean;
 				}
 				
 				this.pointer++;
@@ -270,4 +246,6 @@ public class Extended
 		String output=input+"%20(M"+input.substring(input.length()-2)+")";
 		return output;
 	}
+
+
 }

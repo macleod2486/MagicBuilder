@@ -27,6 +27,7 @@ public abstract class Magic
 	{
 		boolean executed;
 		String selection="";
+		
 		try
 		{
 			Scanner screen = new Scanner(System.in);
@@ -41,24 +42,24 @@ public abstract class Magic
 		
 		if(selection.equals("1"))
 		{
-			Standard stand = new Standard();
-			executed=stand.standard();
+			Gatherer gather = new Gatherer();
+			executed=gather.gather(0);
 			if(executed)
-				stand.tcg();
+				gather.tcg();
 		}
 		else if(selection.equals("2"))
 		{
-			Extended extend = new Extended();
-			executed=extend.extended();
+			Gatherer gather = new Gatherer();
+			executed=gather.gather(1);
 			if(executed)
-				extend.tcg();
+				gather.tcg();
 		}
 		else if(selection.equals("3"))
 		{
-			Modern modern = new Modern();
-			executed=modern.modern();
+			Gatherer gather = new Gatherer();
+			executed=gather.gather(2);
 			if(executed)
-				modern.tcg();
+				gather.tcg();
 		}
 		else if(selection.equals("4"))
 		{
@@ -72,7 +73,7 @@ public abstract class Magic
 		}
 		else if(selection.equals("5"))
 		{
-			//Future place for the Vintage code
+			//Future place for the Vintage parsing
 		}
 		
 	}
