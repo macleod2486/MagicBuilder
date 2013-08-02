@@ -31,7 +31,7 @@ public abstract class Magic
 		try
 		{
 			Scanner screen = new Scanner(System.in);
-			System.out.printf("Please make your selection\n1)Standard\n2)Extended\n3)Modern\n");
+			System.out.printf("Please make your selection\n1)Standard\n2)Extended\n3)Modern\n4)Legacy/Vintage\n");
 			selection=screen.next();
 			screen.close();
 		}
@@ -66,15 +66,13 @@ public abstract class Magic
 			/*
 			 * Haven't quite worked out how to properly parse the info
 			 *  
-			Legacy legacy = new Legacy();
-			executed=legacy.extended();
+			 *  */
+			Gatherer gather = new Gatherer();
+			executed=gather.gatherAll();
 			if(executed)
-				legacy.tcg(); */
+				gather.tcg();
 		}
-		else if(selection.equals("5"))
-		{
-			//Future place for the Vintage parsing
-		}
+		
 		
 	}
 }

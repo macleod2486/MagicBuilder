@@ -32,14 +32,16 @@ import org.jsoup.select.Elements;
 
 public class Gatherer 
 {
-	String Sets[]=new String[40];
-	String Names[]=new String[40];
+	private String Sets[]=new String[300];
+	private String Names[]=new String[300];
 	
 	//Urls of each of the different formats from the Wizards website
-	String structuredFormat[]={"https://www.wizards.com/magic/magazine/article.aspx?x=judge/resources/sfrstandard",
+	private String structuredFormat[]={"https://www.wizards.com/magic/magazine/article.aspx?x=judge/resources/sfrstandard",
 							   "https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrextended",
 							   "https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrmodern"};
-	int pointer=0;
+	//Url of all the formats
+	private String allFormat="http://store.tcgplayer.com/magic?partner=WWWTCG";
+	private int pointer=0;
 	int year=0;
 	
 	//Connects to the TCG website to then gather the prices
@@ -62,9 +64,6 @@ public class Gatherer
 			String mediumPrice;
 			String lowPrice;
 			
-			String highestCard=" ";
-			double high =0;
-			
 			//Variables to take in information
 			Document page;
 			Element table;
@@ -75,13 +74,15 @@ public class Gatherer
 			 * Grabs the modified set values to then be used for the website url format
 			 * Not the most effecient for loop but will be modified as time goes on.
 			 */
-			for(int limit=0; limit<this.pointer; limit++)
+			for(int limit=0; limit<pointer; limit++)
 			{
 				rowNum=0;
 				
 				System.out.println("\nSet name: "+Names[limit]+"\n");
 				
-				//Creates a new sheet per set
+				//Creates a new sheet per set after it filters out bad characters
+				if(Names[limit].contains(":"))
+					Names[limit].replace(":", " ");
 				setname=standard.createSheet(Names[limit]);
 				
 				//Sets up the initial row in the sheet
@@ -95,12 +96,14 @@ public class Gatherer
 				info=newRow.createCell(3);
 				info.setCellValue("Low Price");
 				
+				
 				/*Each modified string value is then put in the following url to then parse
 				  the information from it. */
 				
 				page = Jsoup.connect("http://magic.tcgplayer.com/db/price_guide.asp?setname="+Sets[limit]).get();
 				table = page.select("table").get(2);
 				row=table.select("tr");
+				
 				
 				//Grabs each card that was selected
 				for(Element tableRow: row)
@@ -109,58 +112,46 @@ public class Gatherer
 					item=tableRow.select("td");
 					clean=item.get(0).text();
 					
-					
-					
 					//Filters out land cards
-					if(!clean.contains("Forest")&&!clean.contains("Mountain")&&!clean.contains("Swamp")&&!clean.contains("Island")&&!clean.contains("Plains"))
+					if(!clean.contains("Forest")&&!clean.contains("Mountain")&&!clean.contains("Swamp")&&!clean.contains("Island")&&!clean.contains("Plains")&&!clean.isEmpty())
 					{
-						//Creates new row in the sheet
-						newRow = setname.createRow(rowNum+1);
-						
-						//Gets the name of the card
-						clean=clean.substring(1);
-						info=newRow.createCell(0);
-						info.setCellValue(clean);
-						
-						//This gets the high price
-						highprice=item.get(5).text();
-						highprice=highprice.substring(1,highprice.length()-2);
-						info=newRow.createCell(1);
-						info.setCellValue(highprice);
-						
-						//This gets the medium price
-						mediumPrice=item.get(6).text();
-						mediumPrice=mediumPrice.substring(1,mediumPrice.length()-2);
-						info=newRow.createCell(2);
-						info.setCellValue(mediumPrice);
-						
-						//This gets the low price
-						lowPrice = item.get(7).text();
-						lowPrice = lowPrice.substring(1,lowPrice.length()-2);
-						info=newRow.createCell(3);
-						info.setCellValue(lowPrice);
-						
-						//Finds highest card using the high price
-						if(high<Double.parseDouble(highprice))
-						{	
-							high=Double.parseDouble(highprice);
-							highestCard=clean;
+						if(item.get(5).text().length()>2&&item.get(6).text().length()>2&&item.get(6).text().length()>2)
+						{
+							//Creates new row in the sheet
+							newRow = setname.createRow(rowNum+1);
+							
+							//Gets the name of the card
+							clean=clean.substring(1);
+							info=newRow.createCell(0);
+							info.setCellValue(clean);
+							
+							//This gets the high price
+							highprice=item.get(5).text();
+							highprice=highprice.substring(1,highprice.length()-2);
+							info=newRow.createCell(1);
+							info.setCellValue(highprice);
+							
+							//This gets the medium price
+							mediumPrice=item.get(6).text();
+							mediumPrice=mediumPrice.substring(1,mediumPrice.length()-2);
+							info=newRow.createCell(2);
+							info.setCellValue(mediumPrice);
+							
+							//This gets the low price
+							lowPrice = item.get(7).text();
+							lowPrice = lowPrice.substring(1,lowPrice.length()-2);
+							info=newRow.createCell(3);
+							info.setCellValue(lowPrice);
+							
+							
+							System.out.println(clean+"  H:$"+highprice+" M:$"+mediumPrice+" L:$"+lowPrice);
+							rowNum++;
+							
 						}
-						
-						System.out.println(clean+"  H:$"+highprice+" M:$"+mediumPrice);
-						rowNum++;
 					}
 					
 				}
 				
-				//Displays
-				System.out.println("**************************************");
-				System.out.println("Highest Card out of set "+highestCard+" $"+high);
-				System.out.println("**************************************\n");
-				
-				//Resets the values found for the next set
-				highestCard="";
-				high=0;
 			}
 			
 			//Writes the workbook to the file and closes it
@@ -185,7 +176,67 @@ public class Gatherer
 		}
 		
 	}
-
+	//Similer to the other method but selects every set from a different location
+	public boolean gatherAll()
+	{
+		String clean;
+		char check;
+		
+		try
+		{
+			//Grabs the webpage then selects the list of sets
+			Document page = Jsoup.connect(allFormat).get();
+			Elements article = page.select("div#advancedSearchSets");
+			Elements table = article.select("table");
+			Elements tableBody = table.select("tbody");
+			Elements tableRow = tableBody.select("tr");
+			Elements list;
+			this.pointer = 0;
+			
+			//Loops through each item within the list of available sets
+			for(Element item: tableRow)
+			{
+				//Selects all the links within the table rows
+				list = item.select("a[href]");
+				
+				for(Element itemName: list)
+				{	
+					Names[pointer]=itemName.text();
+					clean = itemName.text().replaceAll(" ", "%20");
+					
+					//Further processes the items within found on the site
+					for(int length=0; length<clean.length(); length++)
+					{
+						check=clean.charAt(length);
+						if(check=='(')
+						{
+							clean = clean.substring(0,length-3);
+						}
+					}
+					
+					//Checks to see if the set is a core set or not
+					if(clean.matches(".*\\d\\d\\d\\d.*"))
+					{
+						Sets[pointer]=coreSet(clean);
+						
+					}
+					else
+					{
+						Sets[pointer]=clean;
+					}
+					this.pointer++;
+				}
+			}
+			
+			return true;
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error! "+e);
+			return false;
+		}
+	}
+	
 	public boolean gather(int selection)
 	{
 		String clean;
@@ -193,12 +244,12 @@ public class Gatherer
 		
 		try
 		{
-			//Grabs the webpage then selects the list of standard sets
+			//Grabs the webpage then selects the list of sets
 			Document page = Jsoup.connect(structuredFormat[selection]).get();
 			Elements article = page.select("div.article-content");
 			Element table = article.select("ul").get(0);
 			Elements list = table.select("li");
-			this.pointer = 0;
+			pointer = 0;
 			//Loops through each item within the list of available standard sets
 			for(Element item: list)
 			{
@@ -216,7 +267,7 @@ public class Gatherer
 					}
 				}
 				
-				//Checks to see if the standard set is a core set or not
+				//Checks to see if the set is a core set or not
 				if(clean.matches(".*\\d\\d\\d\\d.*"))
 				{
 					Sets[pointer]=coreSet(clean);
@@ -230,13 +281,12 @@ public class Gatherer
 				this.pointer++;
 			}
 			
-			//System.out.println("Number of items in list "+pointer);
 			return true;
 		}
 		catch(Exception e)
 		{
 			System.out.println("Error! "+e);
-			return true;
+			return false;
 		}
 	}
 	
