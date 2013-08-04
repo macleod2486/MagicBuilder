@@ -20,11 +20,12 @@ package com.macleod2486.magicbuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
-
+//Apache Imports
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+//JSoup imports
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -37,8 +38,8 @@ public class Gatherer
 	
 	//Urls of each of the different formats from the Wizards website
 	private String structuredFormat[]={"https://www.wizards.com/magic/magazine/article.aspx?x=judge/resources/sfrstandard",
-							   "https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrextended",
-							   "https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrmodern"};
+							   			"https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrextended",
+							   			"https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrmodern"};
 	//Url of all the formats
 	private String allFormat="http://store.tcgplayer.com/magic?partner=WWWTCG";
 	private int pointer=0;
@@ -82,7 +83,13 @@ public class Gatherer
 				
 				//Creates a new sheet per set after it filters out bad characters
 				if(Names[limit].contains(":"))
-					Names[limit].replace(":", " ");
+				{	
+					Names[limit]=Names[limit].replaceAll(":", "\\W");
+				}
+				else if(Names[limit].contains("/"))
+				{
+					Names[limit]=Names[limit].replaceAll("/", "\\W");
+				}
 				setname=standard.createSheet(Names[limit]);
 				
 				//Sets up the initial row in the sheet
@@ -151,7 +158,7 @@ public class Gatherer
 					}
 					
 				}
-				
+
 			}
 			
 			//Writes the workbook to the file and closes it
@@ -296,6 +303,7 @@ public class Gatherer
 		String output=input+"%20(M"+input.substring(input.length()-2)+")";
 		return output;
 	}
-
+	
+	
 
 }

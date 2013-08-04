@@ -20,7 +20,6 @@ package com.macleod2486.magicbuilder;
 
 import java.util.Scanner;
 
-
 public abstract class Magic 
 {
 	public static void main(String args[])
