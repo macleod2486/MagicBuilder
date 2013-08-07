@@ -9,5 +9,4 @@ The following libraries will be needed prior to compiling.
 
 -Apache POI 3.9
 
-Any Questions? Feel free to email me at
-macleod2486@gmail.com
+Which are added within the libs/ directory
