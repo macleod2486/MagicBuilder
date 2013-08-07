@@ -304,6 +304,27 @@ public class Gatherer
 					Sets[pointer]=coreSet(clean);
 					
 				}
+				//Since there is a in-consistancy within the database these two are necessary
+				else if(clean.contains("Sixth")&&clean.contains("Edition"))
+				{
+					Sets[pointer]="Classic%20Sixth%20Edition";
+				}
+				else if(clean.contains("Seventh")&&clean.contains("Edition"))
+				{
+					Sets[pointer]="7th%20Edition";
+				}
+				else if(clean.contains("Eighth")&&clean.contains("Edition"))
+				{
+					Sets[pointer]="8th%20Edition";
+				}
+				else if(clean.contains("Ninth")&&clean.contains("Edition"))
+				{
+					Sets[pointer]="9th%20Edition";
+				}
+				else if(clean.contains("Tenth")&&clean.contains("Edition"))
+				{
+					Sets[pointer]="10th%20Edition";
+				}
 				else
 				{
 					Sets[pointer]=clean;
