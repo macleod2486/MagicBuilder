@@ -61,10 +61,10 @@ public class Gatherer
 			
 			//Various values to screen the data
 			String clean;
-			String highprice;
-			String mediumPrice;
-			String lowPrice;
-			
+			double highprice;
+			double mediumPrice;
+			double lowPrice;
+			String temp;
 			//Variables to take in information
 			Document page;
 			Element table;
@@ -133,20 +133,20 @@ public class Gatherer
 							info.setCellValue(clean);
 							
 							//This gets the high price
-							highprice=item.get(5).text();
-							highprice=highprice.substring(1,highprice.length()-2);
+							temp=item.get(5).text();
+							highprice=removeCommas(temp.substring(1,temp.length()-2));
 							info=newRow.createCell(1);
 							info.setCellValue(highprice);
 							
 							//This gets the medium price
-							mediumPrice=item.get(6).text();
-							mediumPrice=mediumPrice.substring(1,mediumPrice.length()-2);
+							temp=item.get(6).text();
+							mediumPrice=removeCommas(temp.substring(1,temp.length()-2));
 							info=newRow.createCell(2);
 							info.setCellValue(mediumPrice);
 							
 							//This gets the low price
-							lowPrice = item.get(7).text();
-							lowPrice = lowPrice.substring(1,lowPrice.length()-2);
+							temp = item.get(7).text();
+							lowPrice = removeCommas(temp.substring(1,temp.length()-2));
 							info=newRow.createCell(3);
 							info.setCellValue(lowPrice);
 							
@@ -183,6 +183,7 @@ public class Gatherer
 		}
 		
 	}
+	
 	//Similer to the other method but selects every set from a different location
 	public boolean gatherAll()
 	{
@@ -349,6 +350,27 @@ public class Gatherer
 		return output;
 	}
 	
+	private Double removeCommas(String input)
+	{
+		double output=0;
+		boolean found = false;
+		for(int start =0; start<input.length(); start++)
+		{
+			if(input.charAt(start)==',')
+			{
+				output=Double.parseDouble(input.substring(0,start)+input.substring(start+1));
+				found=true;
+				break;
+			}
+		}
+		
+		if(found)
+			return output;
+		else
+			return(Double.parseDouble(input));
+		
+		
+	}
 	
 
 }
