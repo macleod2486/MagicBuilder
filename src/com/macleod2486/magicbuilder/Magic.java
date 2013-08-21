@@ -63,7 +63,7 @@ public abstract class Magic
 		else if(selection.equals("4"))
 		{
 			/*
-			 * Haven't quite worked out how to properly parse the info
+			 * Haven't quite worked out how to efficiently parse the info
 			 *  
 			 *  */
 			Gatherer gather = new Gatherer();
