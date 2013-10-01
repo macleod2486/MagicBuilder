@@ -10,3 +10,6 @@ The following libraries will be needed prior to compiling.
 -Apache POI 3.9
 
 Which are added within the libs/ directory
+
+### Currently supported sites
+* TCGPlayer
