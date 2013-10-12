@@ -1,4 +1,8 @@
+#Removed usual build files
 bin/
 .project
 .classpath
 .settings/
+
+#Removed any new .xls files
+*xls
