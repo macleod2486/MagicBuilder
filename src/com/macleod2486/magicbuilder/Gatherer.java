@@ -225,13 +225,43 @@ public class Gatherer
 						}
 					}
 					
-					//Checks to see if the set is a core set or not
-					if(clean.matches(".*\\d\\d\\d\\d.*"))
+					//Since there is a in-consistancy within the database these are necessary
+					if(clean.contains("Starter")&&clean.contains("1999"))
 					{
-						Sets[pointer]=coreSet(clean);
-						
+						Sets[pointer]="Starter%201999";
 					}
-					//Since there is a in-consistancy within the database these two are necessary
+					else if(clean.contains("Starter")&&clean.contains("2000"))
+					{
+						Sets[pointer]="Starter%202000";
+					}
+					else if(clean.contains("Magic")&&clean.contains("2010"))
+					{
+						Sets[pointer]="Magic%202010";
+					}
+					else if(clean.contains("Planechase")&&clean.contains("2012"))
+					{
+						Sets[pointer]="Planechase%202012";
+					}
+					else if(clean.contains("PDS")&&clean.contains("Fire"))
+					{
+						Sets[pointer]="Premium%20Deck%20Series:%20Fire%20and%20Lightning";
+					}
+					else if(clean.contains("PDS")&&clean.contains("Slivers"))
+					{
+						Sets[pointer]="Premium%20Deck%20Series:%20Slivers";
+					}
+					else if(clean.contains("PDS")&&clean.contains("Graveborn"))
+					{
+						Sets[pointer]="Premium%20Deck%20Series:%20Graveborn";
+					}
+					else if(clean.contains("vs")&&clean.contains("Knights")&&clean.contains("Dragons"))
+					{
+						Sets[pointer]="Duel%20Decks:%20Knights%20vs%20Dragons";
+					}
+					else if(clean.contains("vs."))
+					{
+						Sets[pointer]="Duel%20Decks:%20"+clean;
+					}
 					else if(clean.contains("Sixth")&&clean.contains("Edition"))
 					{
 						Sets[pointer]="Classic%20Sixth%20Edition";
@@ -251,6 +281,13 @@ public class Gatherer
 					else if(clean.contains("Tenth")&&clean.contains("Edition"))
 					{
 						Sets[pointer]="10th%20Edition";
+					}
+					
+					//Checks to see if the set is a core set or not
+					else if(clean.matches(".*\\d\\d\\d\\d.*"))
+					{
+						Sets[pointer]=coreSet(clean);
+						
 					}
 					else
 					{
