@@ -44,6 +44,7 @@ public class Gatherer
 	private String allFormat="http://store.tcgplayer.com/magic?partner=WWWTCG";
 	private int pointer=0;
 	int year=0;
+	int selection = 4;
 	
 	//Connects to the TCG website to then gather the prices
 	public void tcg()
@@ -162,10 +163,34 @@ public class Gatherer
 			}
 			
 			//Writes the workbook to the file and closes it
-			File standardFile = new File("Structured.xls");
-			FileOutputStream standardOutput = new FileOutputStream(standardFile);
-			standard.write(standardOutput);
-			standardOutput.close();
+			if(this.selection == 0)
+			{
+				File standardFile = new File("Standard.xls");
+				FileOutputStream standardOutput = new FileOutputStream(standardFile);
+				standard.write(standardOutput);
+				standardOutput.close();
+			}
+			else if(this.selection == 1)
+			{
+				File standardFile = new File("Extended.xls");
+				FileOutputStream standardOutput = new FileOutputStream(standardFile);
+				standard.write(standardOutput);
+				standardOutput.close();
+			}
+			else if(this.selection == 2)
+			{
+				File standardFile = new File("Modern.xls");
+				FileOutputStream standardOutput = new FileOutputStream(standardFile);
+				standard.write(standardOutput);
+				standardOutput.close();
+			}
+			else
+			{
+				File standardFile = new File("All.xls");
+				FileOutputStream standardOutput = new FileOutputStream(standardFile);
+				standard.write(standardOutput);
+				standardOutput.close();
+			}
 			
 		}
 	
@@ -310,6 +335,7 @@ public class Gatherer
 	{
 		String clean;
 		char check;
+		this.selection = selection;
 		
 		try
 		{
@@ -336,13 +362,15 @@ public class Gatherer
 					}
 				}
 				
-				//Checks to see if the set is a core set or not
-				if(clean.matches(".*\\d\\d\\d\\d.*"))
-				{
-					Sets[pointer]=coreSet(clean);
-					
-				}
 				//Since there is a in-consistancy within the database these two are necessary
+				if(clean.contains("Magic")&&clean.contains("2010"))
+				{
+					Sets[pointer]="Magic%202010";
+				}
+				else if(clean.contains("Ravnica")&&clean.contains("City"))
+				{
+					Sets[pointer]="Ravnica";
+				}
 				else if(clean.contains("Sixth")&&clean.contains("Edition"))
 				{
 					Sets[pointer]="Classic%20Sixth%20Edition";
@@ -362,6 +390,12 @@ public class Gatherer
 				else if(clean.contains("Tenth")&&clean.contains("Edition"))
 				{
 					Sets[pointer]="10th%20Edition";
+				}
+				//Checks to see if the set is a core set or not
+				else if(clean.matches(".*\\d\\d\\d\\d.*"))
+				{
+					Sets[pointer]=coreSet(clean);
+					
 				}
 				else
 				{
