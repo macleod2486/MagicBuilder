@@ -20,6 +20,9 @@ package com.macleod2486.magicbuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 //Apache Imports
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -162,31 +165,34 @@ public class Gatherer
 
 			}
 			
-			//Writes the workbook to the file and closes it
+			//Creates the date to be added in the output file name. 
+			DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+		    Date date = new Date();
+		    
 			if(this.selection == 0)
 			{
-				File standardFile = new File("Standard.xls");
+				File standardFile = new File("Standard-"+dateFormat.format(date)+"-.xls");
 				FileOutputStream standardOutput = new FileOutputStream(standardFile);
 				standard.write(standardOutput);
 				standardOutput.close();
 			}
 			else if(this.selection == 1)
 			{
-				File standardFile = new File("Extended.xls");
+				File standardFile = new File("Extended-"+dateFormat.format(date)+"-.xls");
 				FileOutputStream standardOutput = new FileOutputStream(standardFile);
 				standard.write(standardOutput);
 				standardOutput.close();
 			}
 			else if(this.selection == 2)
 			{
-				File standardFile = new File("Modern.xls");
+				File standardFile = new File("Modern-"+dateFormat.format(date)+"-.xls");
 				FileOutputStream standardOutput = new FileOutputStream(standardFile);
 				standard.write(standardOutput);
 				standardOutput.close();
 			}
 			else
 			{
-				File standardFile = new File("All.xls");
+				File standardFile = new File("All-"+dateFormat.format(date)+"-.xls");
 				FileOutputStream standardOutput = new FileOutputStream(standardFile);
 				standard.write(standardOutput);
 				standardOutput.close();
