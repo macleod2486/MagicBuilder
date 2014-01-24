@@ -21,8 +21,10 @@ package com.macleod2486.magicbuilder;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 //Apache Imports
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -74,6 +76,14 @@ public class Gatherer
 			Element table;
 			Elements row;
 			Elements item;
+			
+			//Variables for extra information about the set
+			double averageHighPrice = 0;
+			double averageMediumPrice = 0;
+			double averageLowPrice = 0;
+			
+			DecimalFormat format = new DecimalFormat("#.00");
+			
 			
 			/*
 			 * Grabs the modified set values to then be used for the website url format
@@ -141,19 +151,21 @@ public class Gatherer
 							highprice=removeCommas(temp.substring(1,temp.length()-2));
 							info=newRow.createCell(1);
 							info.setCellValue(highprice);
+							averageHighPrice += highprice;
 							
 							//This gets the medium price
 							temp=item.get(6).text();
 							mediumPrice=removeCommas(temp.substring(1,temp.length()-2));
 							info=newRow.createCell(2);
 							info.setCellValue(mediumPrice);
+							averageMediumPrice +=mediumPrice;
 							
 							//This gets the low price
 							temp = item.get(7).text();
 							lowPrice = removeCommas(temp.substring(1,temp.length()-2));
 							info=newRow.createCell(3);
 							info.setCellValue(lowPrice);
-							
+							averageLowPrice += lowPrice;
 							
 							System.out.println(clean+"  H:$"+highprice+" M:$"+mediumPrice+" L:$"+lowPrice);
 							rowNum++;
@@ -162,6 +174,38 @@ public class Gatherer
 					}
 					
 				}
+				
+				//Finds the averages
+				averageHighPrice /= rowNum;
+				averageMediumPrice /= rowNum;
+				averageLowPrice /= rowNum;
+				
+				//Formats them
+				averageHighPrice = Double.parseDouble(format.format(averageHighPrice));
+				averageMediumPrice = Double.parseDouble(format.format(averageMediumPrice));
+				averageLowPrice = Double.parseDouble(format.format(averageLowPrice));
+				
+				//Inserts the values into the table
+				newRow = setname.getRow(0); 
+				info = newRow.createCell(4);
+				info.setCellValue("Average High Price");
+				info = newRow.createCell(5);
+				info.setCellValue("Average Medium Price");
+				info = newRow.createCell(6);
+				info.setCellValue("Average Low Price");
+				
+				newRow = setname.getRow(1);
+				info = newRow.createCell(4);
+				info.setCellValue(averageHighPrice);
+				info = newRow.createCell(5);
+				info.setCellValue(averageMediumPrice);
+				info = newRow.createCell(6);
+				info.setCellValue(averageLowPrice);
+				
+				System.out.println("Average Prices "+averageHighPrice+" "+averageMediumPrice+" "+averageLowPrice);
+				
+				//Zeroes them out
+				averageHighPrice = averageMediumPrice = averageLowPrice = 0;
 
 			}
 			
