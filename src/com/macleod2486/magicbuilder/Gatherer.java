@@ -206,6 +206,15 @@ public class Gatherer
 				
 				//Zeroes them out
 				averageHighPrice = averageMediumPrice = averageLowPrice = 0;
+				
+				//Sets the sheet to auto size columns
+				setname.autoSizeColumn(0);
+				setname.autoSizeColumn(1);
+				setname.autoSizeColumn(2);
+				setname.autoSizeColumn(3);
+				setname.autoSizeColumn(4);
+				setname.autoSizeColumn(5);
+				setname.autoSizeColumn(6);
 
 			}
 			
