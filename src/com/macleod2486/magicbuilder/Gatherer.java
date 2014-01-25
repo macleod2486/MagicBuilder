@@ -28,7 +28,6 @@ import java.util.Date;
 //Apache Imports
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 //JSoup imports
 import org.jsoup.Jsoup;
@@ -63,7 +62,6 @@ public class Gatherer
 			HSSFWorkbook standard = new HSSFWorkbook();
 			HSSFSheet setname;
 			Row newRow;
-			Cell info;
 			
 			//Various values to screen the data
 			String clean;
@@ -108,6 +106,11 @@ public class Gatherer
 				
 				//Sets up the initial row in the sheet
 				newRow = setname.createRow(0);
+				newRow.createCell(0).setCellValue("Card Name");
+				newRow.createCell(1).setCellValue("High Price");
+				newRow.createCell(2).setCellValue("Medium Price");
+				newRow.createCell(3).setCellValue("Low Price");
+				/*
 				info=newRow.createCell(0);
 				info.setCellValue("Card Name");
 				info=newRow.createCell(1);
@@ -116,7 +119,7 @@ public class Gatherer
 				info.setCellValue("Medium Price");
 				info=newRow.createCell(3);
 				info.setCellValue("Low Price");
-				
+				*/
 				
 				/*Each modified string value is then put in the following url to then parse
 				  the information from it. */
@@ -143,28 +146,24 @@ public class Gatherer
 							
 							//Gets the name of the card
 							clean=clean.substring(1);
-							info=newRow.createCell(0);
-							info.setCellValue(clean);
+							newRow.createCell(0).setCellValue(clean);
 							
 							//This gets the high price
 							temp=item.get(5).text();
 							highprice=removeCommas(temp.substring(1,temp.length()-2));
-							info=newRow.createCell(1);
-							info.setCellValue(highprice);
+							newRow.createCell(1).setCellValue(highprice);
 							averageHighPrice += highprice;
 							
 							//This gets the medium price
 							temp=item.get(6).text();
 							mediumPrice=removeCommas(temp.substring(1,temp.length()-2));
-							info=newRow.createCell(2);
-							info.setCellValue(mediumPrice);
+							newRow.createCell(2).setCellValue(mediumPrice);
 							averageMediumPrice +=mediumPrice;
 							
 							//This gets the low price
 							temp = item.get(7).text();
 							lowPrice = removeCommas(temp.substring(1,temp.length()-2));
-							info=newRow.createCell(3);
-							info.setCellValue(lowPrice);
+							newRow.createCell(3).setCellValue(lowPrice);
 							averageLowPrice += lowPrice;
 							
 							System.out.println(clean+"  H:$"+highprice+" M:$"+mediumPrice+" L:$"+lowPrice);
@@ -187,20 +186,15 @@ public class Gatherer
 				
 				//Inserts the values into the table
 				newRow = setname.getRow(0); 
-				info = newRow.createCell(4);
-				info.setCellValue("Average High Price");
-				info = newRow.createCell(5);
-				info.setCellValue("Average Medium Price");
-				info = newRow.createCell(6);
-				info.setCellValue("Average Low Price");
+				
+				newRow.createCell(4).setCellValue("Average High Price");
+				newRow.createCell(5).setCellValue("Average Medium Price");
+				newRow.createCell(6).setCellValue("Average Low Price");
 				
 				newRow = setname.getRow(1);
-				info = newRow.createCell(4);
-				info.setCellValue(averageHighPrice);
-				info = newRow.createCell(5);
-				info.setCellValue(averageMediumPrice);
-				info = newRow.createCell(6);
-				info.setCellValue(averageLowPrice);
+				newRow.createCell(4).setCellValue(averageHighPrice);
+				newRow.createCell(5).setCellValue(averageMediumPrice);
+				newRow.createCell(6).setCellValue(averageLowPrice);
 				
 				System.out.println("Average Prices "+averageHighPrice+" "+averageMediumPrice+" "+averageLowPrice);
 				
