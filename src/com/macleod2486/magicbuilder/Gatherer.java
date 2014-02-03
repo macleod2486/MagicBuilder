@@ -65,9 +65,9 @@ public class Gatherer
 			
 			//Various values to screen the data
 			String clean;
-			double highprice;
-			double mediumPrice;
-			double lowPrice;
+			double highprice = 0;
+			double mediumPrice = 0;
+			double lowPrice = 0;
 			String temp;
 			//Variables to take in information
 			Document page;
@@ -164,29 +164,33 @@ public class Gatherer
 					
 				}
 				
-				//Finds the averages
-				averageHighPrice /= rowNum;
-				averageMediumPrice /= rowNum;
-				averageLowPrice /= rowNum;
 				
-				//Formats them
-				averageHighPrice = Double.parseDouble(format.format(averageHighPrice));
-				averageMediumPrice = Double.parseDouble(format.format(averageMediumPrice));
-				averageLowPrice = Double.parseDouble(format.format(averageLowPrice));
-				
-				//Inserts the values into the table
-				newRow = setname.getRow(0); 
-				
-				newRow.createCell(4).setCellValue("Average High Price");
-				newRow.createCell(5).setCellValue("Average Medium Price");
-				newRow.createCell(6).setCellValue("Average Low Price");
-				
-				newRow = setname.getRow(1);
-				newRow.createCell(4).setCellValue(averageHighPrice);
-				newRow.createCell(5).setCellValue(averageMediumPrice);
-				newRow.createCell(6).setCellValue(averageLowPrice);
-				
-				System.out.println("Average Prices "+averageHighPrice+" "+averageMediumPrice+" "+averageLowPrice);
+				if(Double.isNaN(averageHighPrice)&&Double.isNaN(averageMediumPrice)&&Double.isNaN(averageLowPrice))
+				{
+					//Finds the averages
+					averageHighPrice /= rowNum;
+					averageMediumPrice /= rowNum;
+					averageLowPrice /= rowNum;
+					
+					//Formats them
+					averageHighPrice = Double.parseDouble(format.format(averageHighPrice));
+					averageMediumPrice = Double.parseDouble(format.format(averageMediumPrice));
+					averageLowPrice = Double.parseDouble(format.format(averageLowPrice));
+					
+					//Inserts the values into the table
+					newRow = setname.getRow(0); 
+					
+					newRow.createCell(4).setCellValue("Average High Price");
+					newRow.createCell(5).setCellValue("Average Medium Price");
+					newRow.createCell(6).setCellValue("Average Low Price");
+					
+					newRow = setname.getRow(1);
+					newRow.createCell(4).setCellValue(averageHighPrice);
+					newRow.createCell(5).setCellValue(averageMediumPrice);
+					newRow.createCell(6).setCellValue(averageLowPrice);
+					
+					System.out.println("Average Prices "+averageHighPrice+" "+averageMediumPrice+" "+averageLowPrice);
+				}
 				
 				//Zeroes them out
 				averageHighPrice = averageMediumPrice = averageLowPrice = 0;
@@ -239,7 +243,7 @@ public class Gatherer
 	
 		catch(Exception e)
 		{
-			System.out.println("Error! "+e);
+			e.printStackTrace();
 			if(e.toString().contains("Status=400"))
 			{
 				System.out.println("That webpage does not exist!");
@@ -248,7 +252,7 @@ public class Gatherer
 			{
 				System.out.println("Your connection timed out");
 			}
-		}
+		} 
 		
 	}
 	
