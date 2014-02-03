@@ -110,16 +110,6 @@ public class Gatherer
 				newRow.createCell(1).setCellValue("High Price");
 				newRow.createCell(2).setCellValue("Medium Price");
 				newRow.createCell(3).setCellValue("Low Price");
-				/*
-				info=newRow.createCell(0);
-				info.setCellValue("Card Name");
-				info=newRow.createCell(1);
-				info.setCellValue("High Price");
-				info=newRow.createCell(2);
-				info.setCellValue("Medium Price");
-				info=newRow.createCell(3);
-				info.setCellValue("Low Price");
-				*/
 				
 				/*Each modified string value is then put in the following url to then parse
 				  the information from it. */
