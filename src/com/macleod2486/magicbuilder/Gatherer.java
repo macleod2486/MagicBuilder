@@ -457,6 +457,7 @@ public class Gatherer
 		catch(Exception e)
 		{
 			System.out.println("Error! "+e);
+			e.printStackTrace();
 			return false;
 		}
 	}
