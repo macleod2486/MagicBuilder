@@ -1,7 +1,7 @@
 MagicBuilder
 ============
 
-A simple java program that will grab the latest prices and display them per format when selected.
+A simple java program that will grab the latest prices for sanctioned formats. 
 
 The following libraries will be needed prior to compiling.
 
