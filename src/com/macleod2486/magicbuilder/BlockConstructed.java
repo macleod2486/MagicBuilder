@@ -200,7 +200,7 @@ public class BlockConstructed
 					td = cardrow.select("td");
 					tempItem = td.get(0).text().substring(1);
 					
-					if(!tempItem.contains("Forest")&&!tempItem.contains("Mountain")&&!tempItem.contains("Swamp")&&!tempItem.contains("Island")&&!tempItem.isEmpty())
+					if(!tempItem.contains("Forest")&&!tempItem.contains("Mountain")&&!tempItem.contains("Swamp")&&!tempItem.contains("Island")&&!tempItem.contains("Plains")&&!tempItem.isEmpty())
 					{
 						if(td.get(5).text().length()>2&&td.get(6).text().length()>2&&td.get(7).text().length()>2)
 						{
