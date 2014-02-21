@@ -21,23 +21,46 @@ package com.macleod2486.magicbuilder;
 import java.util.Scanner;
 
 public abstract class Magic 
-{
+{	
 	public static void main(String args[])
 	{
-		boolean executed;
-		String selection="";
 		
+		String selection="";
 		try
 		{
 			Scanner screen = new Scanner(System.in);
-			System.out.printf("Please make your selection\n1)Standard\n2)Extended\n3)Modern\n4)Legacy/Vintage\n");
-			selection=screen.next();
+			System.out.printf("Please make your selection:\n1)Block Constructed\n2)Constructed\n");
+			selection = screen.nextLine();
+			
+			if(selection.equals("1"))
+			{
+				BlockConstructed block = new BlockConstructed();
+				block.gatherBlocks();
+				System.out.println("Please make your selection on the block set: ");
+				selection = screen.nextLine();
+				block.getBlock(Integer.parseInt(selection));
+			}
+			else if(selection.equals("2"))
+			{
+				System.out.printf("Please make your selection\n1)Standard\n2)Extended\n3)Modern\n4)Legacy/Vintage\n");
+				selection=screen.nextLine();
+				sanctionedConstructed(selection);
+			}
+			
 			screen.close();
+			
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
+		}		
+		
+	}
+	
+	
+	private static void sanctionedConstructed(String selection)
+	{
+		boolean executed;
 		
 		if(selection.equals("1"))
 		{
@@ -71,7 +94,7 @@ public abstract class Magic
 			if(executed)
 				gather.tcg();
 		}
-		
-		
 	}
+	
+	
 }
