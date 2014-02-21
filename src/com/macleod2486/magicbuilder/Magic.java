@@ -25,38 +25,71 @@ public abstract class Magic
 	public static void main(String args[])
 	{
 		
-		String selection="";
-		try
+		if(args.length>0)
 		{
-			Scanner screen = new Scanner(System.in);
-			System.out.printf("Please make your selection:\n1)Block Constructed\n2)Constructed\n");
-			selection = screen.nextLine();
-			
-			if(selection.equals("1"))
-			{
-				BlockConstructed block = new BlockConstructed();
-				block.gatherBlocks();
-				System.out.println("Please make your selection on the block set: ");
-				selection = screen.nextLine();
-				block.getBlock(Integer.parseInt(selection));
-			}
-			else if(selection.equals("2"))
-			{
-				System.out.printf("Please make your selection\n1)Standard\n2)Extended\n3)Modern\n4)Legacy/Vintage\n");
-				selection=screen.nextLine();
-				sanctionedConstructed(selection);
-			}
-			
-			screen.close();
-			
+			initialArguments(args);
 		}
-		catch(Exception e)
+		else
 		{
-			e.printStackTrace();
-		}		
+			String selection="";
+			try
+			{
+				Scanner screen = new Scanner(System.in);
+				System.out.printf("Please make your selection:\n1)Block Constructed\n2)Constructed\n");
+				selection = screen.nextLine();
+				
+				if(selection.equals("1"))
+				{
+					BlockConstructed block = new BlockConstructed();
+					block.gatherBlocks();
+					System.out.println("Please make your selection on the block set: ");
+					selection = screen.nextLine();
+					block.getBlock(Integer.parseInt(selection));
+				}
+				else if(selection.equals("2"))
+				{
+					System.out.printf("Please make your selection\n1)Standard\n2)Extended\n3)Modern\n4)Legacy/Vintage\n");
+					selection=screen.nextLine();
+					sanctionedConstructed(selection);
+				}
+				
+				screen.close();
+				
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}	
+		}
 		
 	}
 	
+	private static void initialArguments(String arguments[])
+	{
+		if(arguments.length==2)
+		{
+			try
+			{
+			
+				if(arguments[0].equals("1"))
+				{
+					BlockConstructed block = new BlockConstructed();
+					block.gatherBlocks();
+					block.getBlock(Integer.parseInt(arguments[1]));
+				}
+				else if(arguments[0].equals("2"))
+				{
+					sanctionedConstructed(arguments[1]);
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+			System.out.println("You need to enter at least two arguments.");
+	}
 	
 	private static void sanctionedConstructed(String selection)
 	{
