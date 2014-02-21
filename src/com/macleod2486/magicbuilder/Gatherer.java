@@ -129,7 +129,7 @@ public class Gatherer
 					//Filters out land cards
 					if(!clean.contains("Forest")&&!clean.contains("Mountain")&&!clean.contains("Swamp")&&!clean.contains("Island")&&!clean.contains("Plains")&&!clean.isEmpty())
 					{
-						if(item.get(5).text().length()>2&&item.get(6).text().length()>2&&item.get(6).text().length()>2)
+						if(item.get(5).text().length()>2&&item.get(6).text().length()>2&&item.get(7).text().length()>2)
 						{
 							//Creates new row in the sheet
 							newRow = setname.createRow(rowNum+1);
