@@ -21,7 +21,6 @@ package com.macleod2486.magicbuilder;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
