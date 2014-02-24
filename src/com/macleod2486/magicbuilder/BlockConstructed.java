@@ -173,7 +173,6 @@ public class BlockConstructed
 			HSSFSheet blockSet;
 			Row infoRow;
 			
-			DecimalFormat format = new DecimalFormat("#.00");
 			DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
 		    Date date = new Date();
 			
@@ -193,8 +192,6 @@ public class BlockConstructed
 				infoRow.createCell(3).setCellValue("Low Price");
 				
 				
-				//System.out.println((indexAdjust+1)+") "+BlockSets[selection+indexAdjust]);
-				
 				for(Element cardrow: row)
 				{
 					td = cardrow.select("td");
@@ -210,7 +207,6 @@ public class BlockConstructed
 							infoRow.createCell(2).setCellValue(Double.parseDouble(td.get(6).text().substring(1,td.get(6).text().length()-1).replace(",","")));
 							infoRow.createCell(3).setCellValue(Double.parseDouble(td.get(7).text().substring(1,td.get(7).text().length()-1).replace(",","")));
 							
-							//System.out.println(td.get(0).text().substring(1)+" "+td.get(5).text().substring(0,td.get(5).text().length()-1));
 							rowIndex++;
 						}
 						
