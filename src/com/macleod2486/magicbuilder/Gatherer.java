@@ -1,6 +1,6 @@
 /*  Magic Builder
  * 	A simple java program that grabs the latest prices and displays them per set.
-    Copyright (C) 2013  Manuel Gonzales Jr.
+    Copyright (C) 2014  Manuel Gonzales Jr.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
