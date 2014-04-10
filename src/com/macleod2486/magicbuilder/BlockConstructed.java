@@ -115,7 +115,14 @@ public class BlockConstructed
 		{
 			int numberOfCommas= (name.length() - name.replace(",", "").length()) + 1;
 			
-			BlockNames[nameIndex][1]=Integer.toString(numberOfCommas);
+			if(name.contains("Zendikar"))
+			{
+				BlockNames[nameIndex][1]=Integer.toString(numberOfCommas+1);
+			}
+			else
+			{
+				BlockNames[nameIndex][1]=Integer.toString(numberOfCommas);
+			}
 			BlockNames[nameIndex][2]=Integer.toString(setIndex);
 			
 			while(numberOfCommas > 0)
@@ -145,7 +152,6 @@ public class BlockConstructed
 			BlockSets[setIndex] = name;
 			setIndex++;
 		}
-		
 	}
 	
 	//Obtains the selected blocks
