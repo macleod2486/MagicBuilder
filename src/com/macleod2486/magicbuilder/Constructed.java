@@ -308,6 +308,10 @@ public class Constructed
 					{
 						Sets[pointer]="Magic%202010";
 					}
+					else if(clean.contains("Magic")&&clean.contains("2015"))
+					{
+						Sets[pointer]="Magic%202015%20(M15)";
+					}
 					else if(clean.contains("Planechase")&&clean.contains("2012"))
 					{
 						Sets[pointer]="Planechase%202012";
@@ -412,6 +416,10 @@ public class Constructed
 				{
 					Sets[pointer]="Magic%202010";
 				}
+				else if(clean.contains("Magic")&&clean.contains("2015"))
+				{
+					Sets[pointer]="Magic%202015%20(M15)";
+				}
 				else if(clean.contains("Ravnica")&&clean.contains("City"))
 				{
 					Sets[pointer]="Ravnica";
@@ -485,9 +493,5 @@ public class Constructed
 			return output;
 		else
 			return(Double.parseDouble(input));
-		
-		
 	}
-	
-
 }
