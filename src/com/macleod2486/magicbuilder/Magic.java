@@ -24,7 +24,6 @@ public abstract class Magic
 {	
 	public static void main(String args[])
 	{
-		
 		if(args.length>0)
 		{
 			initialArguments(args);
@@ -97,24 +96,24 @@ public abstract class Magic
 		
 		if(selection.equals("1"))
 		{
-			Gatherer gather = new Gatherer();
-			executed=gather.gather(0);
+			Constructed construct = new Constructed();
+			executed=construct.gather(0);
 			if(executed)
-				gather.tcg();
+				construct.tcg();
 		}
 		else if(selection.equals("2"))
 		{
-			Gatherer gather = new Gatherer();
-			executed=gather.gather(1);
+			Constructed construct = new Constructed();
+			executed=construct.gather(1);
 			if(executed)
-				gather.tcg();
+				construct.tcg();
 		}
 		else if(selection.equals("3"))
 		{
-			Gatherer gather = new Gatherer();
-			executed=gather.gather(2);
+			Constructed construct = new Constructed();
+			executed=construct.gather(2);
 			if(executed)
-				gather.tcg();
+				construct.tcg();
 		}
 		else if(selection.equals("4"))
 		{
@@ -122,12 +121,10 @@ public abstract class Magic
 			 * Haven't quite worked out how to efficiently parse the info
 			 *  
 			 *  */
-			Gatherer gather = new Gatherer();
-			executed=gather.gatherAll();
+			Constructed construct = new Constructed();
+			executed=construct.gatherAll();
 			if(executed)
-				gather.tcg();
+				construct.tcg();
 		}
 	}
-	
-	
 }
