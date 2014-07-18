@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -35,8 +36,8 @@ import org.jsoup.select.Elements;
 
 public class Constructed
 {
-	private String Sets[]=new String[300];
-	private String Names[]=new String[300];
+	private ArrayList<String> Names = new ArrayList<String>();
+	private ArrayList<String> Sets = new ArrayList<String>();
 	
 	//Urls of each of the different formats from the Wizards website
 	private String structuredFormat[]={"https://www.wizards.com/magic/magazine/article.aspx?x=judge/resources/sfrstandard",
@@ -44,9 +45,7 @@ public class Constructed
 							   			"https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrmodern"};
 	//Url of all the formats
 	private String allFormat="http://store.tcgplayer.com/magic?partner=WWWTCG";
-	private int pointer=0;
-	int year=0;
-	int selection = 4;
+	private int selection = 4;
 	
 	//Connects to the TCG website to then gather the prices
 	public void tcg()
@@ -85,22 +84,22 @@ public class Constructed
 			 * Grabs the modified set values to then be used for the website url format
 			 * Not the most effecient for loop but will be modified as time goes on.
 			 */
-			for(int limit=0; limit<pointer; limit++)
+			for(int limit = 0; limit < Sets.size(); limit++)
 			{
 				rowNum=0;
 				
-				System.out.println("\nSet name: "+Names[limit]+"\n");
+				System.out.println("\nSet name: "+Names.get(limit).toString()+"\n");
 				
 				//Creates a new sheet per set after it filters out bad characters
-				if(Names[limit].contains(":"))
+				if(Names.get(limit).toString().contains(":"))
 				{	
-					Names[limit]=Names[limit].replaceAll(":", "\\W");
+					Names.set(limit, Names.get(limit).toString().replaceAll(":", "\\W"));
 				}
-				else if(Names[limit].contains("/"))
+				else if(Names.get(limit).toString().contains("/"))
 				{
-					Names[limit]=Names[limit].replaceAll("/", "\\W");
+					Names.set(limit, Names.get(limit).replaceAll("/", "\\W"));
 				}
-				setname=standard.createSheet(Names[limit]);
+				setname=standard.createSheet(Names.get(limit).toString());
 				
 				//Sets up the initial row in the sheet
 				newRow = setname.createRow(0);
@@ -112,7 +111,7 @@ public class Constructed
 				/*Each modified string value is then put in the following url to then parse
 				  the information from it. */
 				
-				page = Jsoup.connect("http://magic.tcgplayer.com/db/price_guide.asp?setname="+Sets[limit]).get();
+				page = Jsoup.connect("http://magic.tcgplayer.com/db/price_guide.asp?setname="+Sets.get(limit).toString()).get();
 				table = page.select("table").get(2);
 				row=table.select("tr");
 				
@@ -269,7 +268,6 @@ public class Constructed
 			Elements tableBody = table.select("tbody");
 			Elements tableRow = tableBody.select("tr");
 			Elements list;
-			this.pointer = 0;
 			
 			//Loops through each item within the list of available sets
 			for(Element item: tableRow)
@@ -279,7 +277,7 @@ public class Constructed
 				
 				for(Element itemName: list)
 				{	
-					Names[pointer]=itemName.text();
+					Names.add(itemName.text());
 					
 					//Replaces all blank characters with the %20 characters 
 					clean = itemName.text().replaceAll(" ", "%20");
@@ -298,76 +296,75 @@ public class Constructed
 					//Since there is a in-consistancy within the database these are necessary
 					if(clean.contains("Starter")&&clean.contains("1999"))
 					{
-						Sets[pointer]="Starter%201999";
+						Sets.add("Starter%201999");
 					}
 					else if(clean.contains("Starter")&&clean.contains("2000"))
 					{
-						Sets[pointer]="Starter%202000";
+						Sets.add("Starter%202000");
 					}
 					else if(clean.contains("Magic")&&clean.contains("2010"))
 					{
-						Sets[pointer]="Magic%202010";
+						Sets.add("Magic%202010");
 					}
 					else if(clean.contains("Magic")&&clean.contains("2015"))
 					{
-						Sets[pointer]="Magic%202015%20(M15)";
+						Sets.add("Magic%202015%20(M15)");
 					}
 					else if(clean.contains("Planechase")&&clean.contains("2012"))
 					{
-						Sets[pointer]="Planechase%202012";
+						Sets.add("Planechase%202012");
 					}
 					else if(clean.contains("PDS")&&clean.contains("Fire"))
 					{
-						Sets[pointer]="Premium%20Deck%20Series:%20Fire%20and%20Lightning";
+						Sets.add("Premium%20Deck%20Series:%20Fire%20and%20Lightning");
 					}
 					else if(clean.contains("PDS")&&clean.contains("Slivers"))
 					{
-						Sets[pointer]="Premium%20Deck%20Series:%20Slivers";
+						Sets.add("Premium%20Deck%20Series:%20Slivers");
 					}
 					else if(clean.contains("PDS")&&clean.contains("Graveborn"))
 					{
-						Sets[pointer]="Premium%20Deck%20Series:%20Graveborn";
+						Sets.add("Premium%20Deck%20Series:%20Graveborn");
 					}
 					else if(clean.contains("vs")&&clean.contains("Knights")&&clean.contains("Dragons"))
 					{
-						Sets[pointer]="Duel%20Decks:%20Knights%20vs%20Dragons";
+						Sets.add("Duel%20Decks:%20Knights%20vs%20Dragons");
 					}
 					else if(clean.contains("vs."))
 					{
-						Sets[pointer]="Duel%20Decks:%20"+clean;
+						Sets.add("Duel%20Decks:%20"+clean);
 					}
 					else if(clean.contains("Sixth")&&clean.contains("Edition"))
 					{
-						Sets[pointer]="Classic%20Sixth%20Edition";
+						Sets.add("Classic%20Sixth%20Edition");
 					}
 					else if(clean.contains("Seventh")&&clean.contains("Edition"))
 					{
-						Sets[pointer]="7th%20Edition";
+						Sets.add("7th%20Edition");
 					}
 					else if(clean.contains("Eighth")&&clean.contains("Edition"))
 					{
-						Sets[pointer]="8th%20Edition";
+						Sets.add("8th%20Edition");
 					}
 					else if(clean.contains("Ninth")&&clean.contains("Edition"))
 					{
-						Sets[pointer]="9th%20Edition";
+						Sets.add("9th%20Edition");
 					}
 					else if(clean.contains("Tenth")&&clean.contains("Edition"))
 					{
-						Sets[pointer]="10th%20Edition";
+						Sets.add("10th%20Edition");
 					}
 					
 					//Checks to see if the set is a core set or not
 					else if(clean.matches(".*\\d\\d\\d\\d.*"))
 					{
-						Sets[pointer]=coreSet(clean);
+						Sets.add(coreSet(clean));
 						
 					}
 					else
 					{
-						Sets[pointer]=clean;
+						Sets.add(clean);
 					}
-					this.pointer++;
 				}
 			}
 			
@@ -393,11 +390,11 @@ public class Constructed
 			Elements article = page.select("div.article-content");
 			Element table = article.select("ul").get(0);
 			Elements list = table.select("li");
-			pointer = 0;
+			
 			//Loops through each item within the list of available standard sets
 			for(Element item: list)
 			{
-				Names[pointer]=item.text();
+				Names.add(item.text());
 				
 				clean = item.text().replaceAll(" ", "%20");
 				
@@ -414,48 +411,46 @@ public class Constructed
 				//Since there is a in-consistancy within the database these two are necessary
 				if(clean.contains("Magic")&&clean.contains("2010"))
 				{
-					Sets[pointer]="Magic%202010";
+					Sets.add("Magic%202010");
 				}
 				else if(clean.contains("Magic")&&clean.contains("2015"))
 				{
-					Sets[pointer]="Magic%202015%20(M15)";
+					Sets.add("Magic%202015%20(M15)");
 				}
 				else if(clean.contains("Ravnica")&&clean.contains("City"))
 				{
-					Sets[pointer]="Ravnica";
+					Sets.add("Ravnica");
 				}
 				else if(clean.contains("Sixth")&&clean.contains("Edition"))
 				{
-					Sets[pointer]="Classic%20Sixth%20Edition";
+					Sets.add("Classic%20Sixth%20Edition");
 				}
 				else if(clean.contains("Seventh")&&clean.contains("Edition"))
 				{
-					Sets[pointer]="7th%20Edition";
+					Sets.add("7th%20Edition");
 				}
 				else if(clean.contains("Eighth")&&clean.contains("Edition"))
 				{
-					Sets[pointer]="8th%20Edition";
+					Sets.add("8th%20Edition");
 				}
 				else if(clean.contains("Ninth")&&clean.contains("Edition"))
 				{
-					Sets[pointer]="9th%20Edition";
+					Sets.add("9th%20Edition");
 				}
 				else if(clean.contains("Tenth")&&clean.contains("Edition"))
 				{
-					Sets[pointer]="10th%20Edition";
+					Sets.add("10th%20Edition");
 				}
 				//Checks to see if the set is a core set or not
 				else if(clean.matches(".*\\d\\d\\d\\d.*"))
 				{
-					Sets[pointer]=coreSet(clean);
+					Sets.add(coreSet(clean));
 					
 				}
 				else
 				{
-					Sets[pointer]=clean;
+					Sets.add(clean);
 				}
-				
-				this.pointer++;
 			}
 			
 			return true;
