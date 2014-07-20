@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -48,7 +49,7 @@ public class BlockConstructed
 	 */
 	
 	private String BlockNames[][] = new String[300][3];
-	private String BlockSets [] = new String[300];
+	private ArrayList<String> BlockSets = new ArrayList<String>();
 	
 	private int setIndex = 0;
 	private int nameIndex = 0;
@@ -132,13 +133,13 @@ public class BlockConstructed
 					name = name.substring(3,name.length());
 				
 				if(name.contains(","))
-					BlockSets[setIndex] = name.substring(0,name.indexOf(','));
+					BlockSets.add(name.substring(0,name.indexOf(',')));
 				else
-					BlockSets[setIndex] = name;
+					BlockSets.add(name);
 				
-				if(BlockSets[setIndex].contains(":")&&BlockSets[setIndex].contains("Ravnica"))
+				if(BlockSets.get(setIndex).toString().contains(":") && BlockSets.get(setIndex).toString().contains("Ravnica"))
 				{
-					BlockSets[setIndex] = BlockSets[setIndex].substring(0,name.indexOf(":"));
+					BlockSets.set(setIndex, BlockSets.get(setIndex).toString().substring(0,name.indexOf(":")));
 				}
 				
 				name = name.substring(name.indexOf(',')+1);
@@ -149,7 +150,7 @@ public class BlockConstructed
 		}
 		else
 		{
-			BlockSets[setIndex] = name;
+			BlockSets.add(name);
 			setIndex++;
 		}
 	}
@@ -183,12 +184,12 @@ public class BlockConstructed
 			
 			while(numberOfSets>0)
 			{
-				page = Jsoup.connect(tcgSite+BlockSets[selection+indexAdjust]).get();
+				page = Jsoup.connect(tcgSite+BlockSets.get(selection+indexAdjust).toString()).get();
 				setSection = page.select("table").get(2);
 				row = setSection.select("tr");
 				rowIndex = 1;
 				
-				blockSet=block.createSheet(BlockSets[selection+indexAdjust].replaceAll("%20"," ").replaceAll("%27", " "));
+				blockSet=block.createSheet(BlockSets.get(selection+indexAdjust).toString().replaceAll("%20"," ").replaceAll("%27", " "));
 				
 				infoRow = blockSet.createRow(0);
 				infoRow.createCell(0).setCellValue("Card Name");
