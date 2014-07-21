@@ -159,6 +159,7 @@ public class BlockConstructed
 	public void getBlock(int selection)
 	{
 		selection--;
+		
 		try
 		{
 			int indexAdjust = 0;

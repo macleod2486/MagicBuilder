@@ -97,23 +97,23 @@ public abstract class Magic
 		if(selection.equals("1"))
 		{
 			Constructed construct = new Constructed();
-			executed=construct.gather(0);
+			executed=construct.gatherByFormat(0);
 			if(executed)
-				construct.tcg();
+				construct.getCards();
 		}
 		else if(selection.equals("2"))
 		{
 			Constructed construct = new Constructed();
-			executed=construct.gather(1);
+			executed=construct.gatherByFormat(1);
 			if(executed)
-				construct.tcg();
+				construct.getCards();
 		}
 		else if(selection.equals("3"))
 		{
 			Constructed construct = new Constructed();
-			executed=construct.gather(2);
+			executed=construct.gatherByFormat(2);
 			if(executed)
-				construct.tcg();
+				construct.getCards();
 		}
 		else if(selection.equals("4"))
 		{
@@ -124,7 +124,7 @@ public abstract class Magic
 			Constructed construct = new Constructed();
 			executed=construct.gatherAll();
 			if(executed)
-				construct.tcg();
+				construct.getCards();
 		}
 	}
 }

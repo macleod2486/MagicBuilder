@@ -48,7 +48,7 @@ public class Constructed
 	private int selection = 4;
 	
 	//Connects to the TCG website to then gather the prices
-	public void tcg()
+	public void getCards()
 	{
 		try
 		{
@@ -377,7 +377,7 @@ public class Constructed
 		}
 	}
 	
-	public boolean gather(int selection)
+	public boolean gatherByFormat(int selection)
 	{
 		String clean;
 		char check;
