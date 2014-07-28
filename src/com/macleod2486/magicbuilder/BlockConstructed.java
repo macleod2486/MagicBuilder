@@ -40,15 +40,10 @@ public class BlockConstructed
 	private String blockList = "https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrblock";
 	private String tcgSite = "http://magic.tcgplayer.com/db/price_guide.asp?setname=";
 	
-	/*
-	 * How the block names variable is broken down
-	 * 
-	 * Index 0: Name of the block.
-	 * Index 1: How many sets are within the block.
-	 * Index 2: Which index does the BlockSets start.
-	 */
+	private ArrayList<String> BlockNames = new ArrayList<String>();
+	private ArrayList<String> NumberOfBlocks = new ArrayList<String>();
+	private ArrayList<String> IndexOfBlocks = new ArrayList<String>();
 	
-	private String BlockNames[][] = new String[300][3];
 	private ArrayList<String> BlockSets = new ArrayList<String>();
 	
 	private int setIndex = 0;
@@ -68,14 +63,16 @@ public class BlockConstructed
 			for(int setVIndex = 0; setVIndex<setsValue.size(); setVIndex++)
 			{
 				setName = setsValue.get(setVIndex).select("i");
-				BlockNames[nameIndex][0]=setName.get(0).toString().replaceAll("<i>","").replaceAll("</i>", "");
+				BlockNames.add(setName.get(0).toString().replaceAll("<i>","").replaceAll("</i>", ""));
+				//BlockNames[nameIndex][0] = setName.get(0).toString().replaceAll("<i>","").replaceAll("</i>", "");
 				
 				setName.remove(0);
 				
 				if(setName.size()>1)
 				{
-					BlockNames[nameIndex][1]=Integer.toString(setName.size());
-					BlockNames[nameIndex][2]=Integer.toString(setIndex);
+					NumberOfBlocks.add(Integer.toString(setName.size()));
+					IndexOfBlocks.add(Integer.toString(setIndex));
+					
 					for(Element name: setName)
 					{
 						filter(name.toString());
@@ -86,7 +83,7 @@ public class BlockConstructed
 					filter(setName.get(0).toString());
 				}
 				
-				System.out.println(nameIndex+1+") "+BlockNames[nameIndex][0]+" "+BlockNames[nameIndex][1]);
+				System.out.println(nameIndex+1+") "+BlockNames.get(nameIndex)+" "+NumberOfBlocks.get(nameIndex));
 				
 				nameIndex++;
 				
@@ -118,13 +115,13 @@ public class BlockConstructed
 			
 			if(name.contains("Zendikar"))
 			{
-				BlockNames[nameIndex][1]=Integer.toString(numberOfCommas+1);
+				NumberOfBlocks.add(Integer.toString(numberOfCommas+1));
 			}
 			else
 			{
-				BlockNames[nameIndex][1]=Integer.toString(numberOfCommas);
+				NumberOfBlocks.add(Integer.toString(numberOfCommas));
 			}
-			BlockNames[nameIndex][2]=Integer.toString(setIndex);
+			BlockSets.add(Integer.toString(setIndex));
 			
 			while(numberOfCommas > 0)
 			{
@@ -139,7 +136,7 @@ public class BlockConstructed
 				
 				if(BlockSets.get(setIndex).toString().contains(":") && BlockSets.get(setIndex).toString().contains("Ravnica"))
 				{
-					BlockSets.set(setIndex, BlockSets.get(setIndex).toString().substring(0,name.indexOf(":")));
+					//BlockSets.set(setIndex, BlockSets.get(setIndex).toString().substring(0,name.indexOf(":")));
 				}
 				
 				name = name.substring(name.indexOf(',')+1);
@@ -164,9 +161,9 @@ public class BlockConstructed
 		{
 			int indexAdjust = 0;
 			int rowIndex;
-			int numberOfSets = Integer.parseInt(BlockNames[selection][1]);
+			int numberOfSets = Integer.parseInt(NumberOfBlocks.get(selection));
 			int blockNameIndex = selection;
-			selection = Integer.parseInt(BlockNames[selection][2]);
+			selection = Integer.parseInt(IndexOfBlocks.get(selection));
 			String tempItem;
 			
 			//Various elements
@@ -229,7 +226,7 @@ public class BlockConstructed
 				
 			}
 			
-			File blockFile = new File(BlockNames[blockNameIndex][0]+"-Block-"+dateFormat.format(date)+"-.xls");
+			File blockFile = new File(BlockNames.get(blockNameIndex)+"-Block-"+dateFormat.format(date)+"-.xls");
 			FileOutputStream blockOutput = new FileOutputStream(blockFile);
 			block.write(blockOutput);
 			blockOutput.close();
