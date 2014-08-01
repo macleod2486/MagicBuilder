@@ -47,7 +47,6 @@ public class BlockConstructed
 	private ArrayList<String> BlockSets = new ArrayList<String>();
 	
 	private int setIndex = 0;
-	private int nameIndex = 0;
 	
 	//Gathers the list of the blocks
 	public void gatherBlocks()
@@ -64,11 +63,10 @@ public class BlockConstructed
 			{
 				setName = setsValue.get(setVIndex).select("i");
 				BlockNames.add(setName.get(0).toString().replaceAll("<i>","").replaceAll("</i>", ""));
-				//BlockNames[nameIndex][0] = setName.get(0).toString().replaceAll("<i>","").replaceAll("</i>", "");
 				
 				setName.remove(0);
 				
-				if(setName.size()>1)
+				if(setName.size() > 1)
 				{
 					NumberOfBlocks.add(Integer.toString(setName.size()));
 					IndexOfBlocks.add(Integer.toString(setIndex));
@@ -78,25 +76,24 @@ public class BlockConstructed
 						filter(name.toString());
 					}
 				}
+				
 				else
 				{
 					filter(setName.get(0).toString());
 				}
 				
-				System.out.println(nameIndex+1+") "+BlockNames.get(nameIndex)+" "+NumberOfBlocks.get(nameIndex));
-				
-				nameIndex++;
+				System.out.println(setVIndex+1+") "+BlockNames.get(setVIndex)+" "+NumberOfBlocks.get(setVIndex));
 				
 			}
 			
 		}
+		
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 		
 	}
-	
 	
 	//To correct for the webmasters mistakes.
 	private void filter(String name)
@@ -115,18 +112,21 @@ public class BlockConstructed
 			
 			if(name.contains("Zendikar"))
 			{
-				NumberOfBlocks.add(Integer.toString(numberOfCommas+1));
+				numberOfCommas++;
+				System.out.println(numberOfCommas);
+				NumberOfBlocks.add(Integer.toString(numberOfCommas));
 			}
+			
 			else
 			{
 				NumberOfBlocks.add(Integer.toString(numberOfCommas));
 			}
-			BlockSets.add(Integer.toString(setIndex));
+			
+			IndexOfBlocks.add(Integer.toString(setIndex));
 			
 			while(numberOfCommas > 0)
 			{
-				
-				if(name.charAt(0)=='%')
+				if(name.charAt(0) == '%')
 					name = name.substring(3,name.length());
 				
 				if(name.contains(","))
@@ -136,7 +136,7 @@ public class BlockConstructed
 				
 				if(BlockSets.get(setIndex).toString().contains(":") && BlockSets.get(setIndex).toString().contains("Ravnica"))
 				{
-					//BlockSets.set(setIndex, BlockSets.get(setIndex).toString().substring(0,name.indexOf(":")));
+					BlockSets.set(setIndex, BlockSets.get(setIndex).toString().substring(0,BlockSets.get(setIndex).indexOf(':')));
 				}
 				
 				name = name.substring(name.indexOf(',')+1);
@@ -239,6 +239,5 @@ public class BlockConstructed
 		}
 		
 	}
-	
 	
 }
