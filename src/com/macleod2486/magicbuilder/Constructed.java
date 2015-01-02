@@ -40,9 +40,13 @@ public class Constructed
 	private ArrayList<String> Sets = new ArrayList<String>();
 	
 	//Urls of each of the different formats from the Wizards website
-	private String structuredFormat[]={"http://magic.wizards.com/en/content/standard-formats-magic-gathering",
+	private String structuredFormat[]={
+										//Standard
+										"http://magic.wizards.com/en/content/standard-formats-magic-gathering",
+										//Extended
 							   			"https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrextended",
-							   			"https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrmodern"};
+							   			//Modern
+							   			"http://magic.wizards.com/en/gameinfo/gameplay/formats/modern"};
 	//Url of all the formats
 	private String allFormat="http://store.tcgplayer.com/magic?partner=WWWTCG";
 	private int selection = 4;
@@ -383,6 +387,7 @@ public class Constructed
 		String clean;
 		char check;
 		this.selection = selection;
+		int elementSelection = selection == 2 ? 1 : 0;
 		
 		try
 		{
@@ -391,7 +396,7 @@ public class Constructed
 			Elements outsidediv = page.select("div.bean_block");
 			Elements oneLevelDiv = outsidediv.select("div.page-width");
 			Elements article = oneLevelDiv.select("div.spacer");
-			Element table = article.select("ul").get(0);
+			Element table = article.select("ul").get(elementSelection);
 			Elements list = table.select("li");
 			
 			//Loops through each item within the list of available standard sets
