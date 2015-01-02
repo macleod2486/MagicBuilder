@@ -40,7 +40,7 @@ public class Constructed
 	private ArrayList<String> Sets = new ArrayList<String>();
 	
 	//Urls of each of the different formats from the Wizards website
-	private String structuredFormat[]={"https://www.wizards.com/magic/magazine/article.aspx?x=judge/resources/sfrstandard",
+	private String structuredFormat[]={"http://magic.wizards.com/en/content/standard-formats-magic-gathering",
 							   			"https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrextended",
 							   			"https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrmodern"};
 	//Url of all the formats
@@ -66,6 +66,7 @@ public class Constructed
 			double mediumPrice = 0;
 			double lowPrice = 0;
 			String temp;
+			
 			//Variables to take in information
 			Document page;
 			Element table;
@@ -387,7 +388,9 @@ public class Constructed
 		{
 			//Grabs the webpage then selects the list of sets
 			Document page = Jsoup.connect(structuredFormat[selection]).get();
-			Elements article = page.select("div.article-content");
+			Elements outsidediv = page.select("div.bean_block");
+			Elements oneLevelDiv = outsidediv.select("div.page-width");
+			Elements article = oneLevelDiv.select("div.spacer");
 			Element table = article.select("ul").get(0);
 			Elements list = table.select("li");
 			
