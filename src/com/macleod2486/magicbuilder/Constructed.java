@@ -43,8 +43,6 @@ public class Constructed
 	private String structuredFormat[]={
 										//Standard
 										"http://magic.wizards.com/en/content/standard-formats-magic-gathering",
-										//Extended
-							   			"https://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrextended",
 							   			//Modern
 							   			"http://magic.wizards.com/en/gameinfo/gameplay/formats/modern"};
 	//Url of all the formats
@@ -221,13 +219,6 @@ public class Constructed
 			}
 			else if(this.selection == 1)
 			{
-				File standardFile = new File("Extended-"+dateFormat.format(date)+"-.xls");
-				FileOutputStream standardOutput = new FileOutputStream(standardFile);
-				standard.write(standardOutput);
-				standardOutput.close();
-			}
-			else if(this.selection == 2)
-			{
 				File standardFile = new File("Modern-"+dateFormat.format(date)+"-.xls");
 				FileOutputStream standardOutput = new FileOutputStream(standardFile);
 				standard.write(standardOutput);
@@ -387,7 +378,7 @@ public class Constructed
 		String clean;
 		char check;
 		this.selection = selection;
-		int elementSelection = selection == 2 ? 1 : 0;
+		int elementSelection = selection == 1 ? 1 : 0;
 		
 		try
 		{

@@ -47,7 +47,7 @@ public abstract class Magic
 				}
 				else if(selection.equals("2"))
 				{
-					System.out.printf("Please make your selection\n1)Standard\n2)Extended\n3)Modern\n4)Legacy/Vintage\n");
+					System.out.printf("Please make your selection\n1)Standard\n2)Modern\n3)Legacy/Vintage\n");
 					selection=screen.nextLine();
 					sanctionedConstructed(selection);
 				}
@@ -109,13 +109,6 @@ public abstract class Magic
 				construct.getCards();
 		}
 		else if(selection.equals("3"))
-		{
-			Constructed construct = new Constructed();
-			executed=construct.gatherByFormat(2);
-			if(executed)
-				construct.getCards();
-		}
-		else if(selection.equals("4"))
 		{
 			/*
 			 * Haven't quite worked out how to efficiently parse the info
