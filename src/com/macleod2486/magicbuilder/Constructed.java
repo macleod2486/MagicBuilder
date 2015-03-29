@@ -82,7 +82,6 @@ public class Constructed
 			
 			DecimalFormat format = new DecimalFormat("#.00");
 			
-			
 			/*
 			 * Grabs the modified set values to then be used for the website url format
 			 * Not the most effecient for loop but will be modified as time goes on.
@@ -196,13 +195,10 @@ public class Constructed
 				averageHighPrice = averageMediumPrice = averageLowPrice = 0;
 				
 				//Sets the sheet to auto size columns
-				setname.autoSizeColumn(0);
-				setname.autoSizeColumn(1);
-				setname.autoSizeColumn(2);
-				setname.autoSizeColumn(3);
-				setname.autoSizeColumn(4);
-				setname.autoSizeColumn(5);
-				setname.autoSizeColumn(6);
+				for(int index = 0; index < 7; index++)
+				{
+					setname.autoSizeColumn(index);
+				}
 
 			}
 			
@@ -277,7 +273,6 @@ public class Constructed
 					
 					//Replaces all blank characters with the %20 characters 
 					clean = itemName.text().replaceAll(" ", "%20");
-					
 					
 					//Further processes the items within found on the site
 					for(int length=0; length<clean.length(); length++)
@@ -355,7 +350,6 @@ public class Constructed
 					else if(clean.matches(".*\\d\\d\\d\\d.*"))
 					{
 						Sets.add(coreSet(clean));
-						
 					}
 					else
 					{
@@ -410,7 +404,7 @@ public class Constructed
 				//Since there is a in-consistancy within the database these two are necessary
 				if(clean.contains("Magic")&&clean.contains("2010"))
 				{
-					Sets.add("Magic%202010");
+					Sets.add("Magic%202010%20(M10)");
 				}
 				else if(clean.contains("Magic")&&clean.contains("2015"))
 				{
@@ -444,7 +438,6 @@ public class Constructed
 				else if(clean.matches(".*\\d\\d\\d\\d.*"))
 				{
 					Sets.add(coreSet(clean));
-					
 				}
 				else
 				{
