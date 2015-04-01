@@ -20,6 +20,7 @@ package com.macleod2486.magicbuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -33,6 +34,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.sun.jndi.toolkit.url.Uri;
 
 public class Constructed
 {
@@ -117,7 +120,6 @@ public class Constructed
 				table = page.select("table").get(2);
 				row=table.select("tr");
 				
-				
 				//Grabs each card that was selected
 				for(Element tableRow: row)
 				{
@@ -126,9 +128,9 @@ public class Constructed
 					clean=item.get(0).text();
 					
 					//Filters out land cards
-					if(!clean.contains("Forest")&&!clean.contains("Mountain")&&!clean.contains("Swamp")&&!clean.contains("Island")&&!clean.contains("Plains")&&!clean.isEmpty())
+					if(!clean.contains("Forest") &&! clean.contains("Mountain") &&! clean.contains("Swamp") &&! clean.contains("Island") &&! clean.contains("Plains") &&! clean.isEmpty())
 					{
-						if(item.get(5).text().length()>2&&item.get(6).text().length()>2&&item.get(7).text().length()>2)
+						if(item.get(5).text().length() > 2 && item.get(6).text().length() > 2 && item.get(7).text().length() > 2 )
 						{
 							//Creates new row in the sheet
 							newRow = setname.createRow(rowNum+1);
@@ -163,8 +165,7 @@ public class Constructed
 					
 				}
 				
-				
-				if(Double.isNaN(averageHighPrice)&&Double.isNaN(averageMediumPrice)&&Double.isNaN(averageLowPrice))
+				if(Double.isNaN(averageHighPrice) && Double.isNaN(averageMediumPrice) && Double.isNaN(averageLowPrice))
 				{
 					//Finds the averages
 					averageHighPrice /= rowNum;
@@ -272,7 +273,8 @@ public class Constructed
 					Names.add(itemName.text());
 					
 					//Replaces all blank characters with the %20 characters 
-					clean = itemName.text().replaceAll(" ", "%20");
+					clean = itemName.text();
+					clean = clean.replaceAll("\u00A0", " ");
 					
 					//Further processes the items within found on the site
 					for(int length=0; length<clean.length(); length++)
@@ -285,75 +287,54 @@ public class Constructed
 					}
 					
 					//Since there is a in-consistancy within the database these are necessary
-					if(clean.contains("Starter")&&clean.contains("1999"))
+					if(clean.contains("PDS") && clean.contains("Fire"))
 					{
-						Sets.add("Starter%201999");
+						Sets.add(URLEncoder.encode("Premium Deck Series: Fire and Lightning","UTF-8"));
 					}
-					else if(clean.contains("Starter")&&clean.contains("2000"))
+					else if(clean.contains("PDS") && clean.contains("Slivers"))
 					{
-						Sets.add("Starter%202000");
+						Sets.add(URLEncoder.encode("Premium Deck Series: Slivers","UTF-8"));
 					}
-					else if(clean.contains("Magic")&&clean.contains("2010"))
+					else if(clean.contains("PDS") && clean.contains("Graveborn"))
 					{
-						Sets.add("Magic%202010");
+						Sets.add(URLEncoder.encode("Premium Deck Series: Graveborn","UTF-8"));
 					}
-					else if(clean.contains("Magic")&&clean.contains("2015"))
+					else if(clean.contains("vs") && clean.contains("Knights")&&clean.contains("Dragons"))
 					{
-						Sets.add("Magic%202015%20(M15)");
-					}
-					else if(clean.contains("Planechase")&&clean.contains("2012"))
-					{
-						Sets.add("Planechase%202012");
-					}
-					else if(clean.contains("PDS")&&clean.contains("Fire"))
-					{
-						Sets.add("Premium%20Deck%20Series:%20Fire%20and%20Lightning");
-					}
-					else if(clean.contains("PDS")&&clean.contains("Slivers"))
-					{
-						Sets.add("Premium%20Deck%20Series:%20Slivers");
-					}
-					else if(clean.contains("PDS")&&clean.contains("Graveborn"))
-					{
-						Sets.add("Premium%20Deck%20Series:%20Graveborn");
-					}
-					else if(clean.contains("vs")&&clean.contains("Knights")&&clean.contains("Dragons"))
-					{
-						Sets.add("Duel%20Decks:%20Knights%20vs%20Dragons");
+						Sets.add(URLEncoder.encode("Duel Decks: Knights vs Dragons","UTF-8"));
 					}
 					else if(clean.contains("vs."))
 					{
-						Sets.add("Duel%20Decks:%20"+clean);
+						Sets.add(URLEncoder.encode("Duel Decks: "+clean,"UTF-8"));
 					}
-					else if(clean.contains("Sixth")&&clean.contains("Edition"))
+					else if(clean.contains("Sixth") && clean.contains("Edition"))
 					{
-						Sets.add("Classic%20Sixth%20Edition");
+						Sets.add(URLEncoder.encode("Classic Sixth Edition","UTF-8"));
 					}
-					else if(clean.contains("Seventh")&&clean.contains("Edition"))
+					else if(clean.contains("Seventh") && clean.contains("Edition"))
 					{
-						Sets.add("7th%20Edition");
+						Sets.add(URLEncoder.encode("7th Edition","UTF-8"));
 					}
-					else if(clean.contains("Eighth")&&clean.contains("Edition"))
+					else if(clean.contains("Eighth") && clean.contains("Edition"))
 					{
-						Sets.add("8th%20Edition");
+						Sets.add(URLEncoder.encode("8th Edition","UTF-8"));
 					}
-					else if(clean.contains("Ninth")&&clean.contains("Edition"))
+					else if(clean.contains("Ninth") && clean.contains("Edition"))
 					{
-						Sets.add("9th%20Edition");
+						Sets.add(URLEncoder.encode("9th Edition","UTF-8"));
 					}
-					else if(clean.contains("Tenth")&&clean.contains("Edition"))
+					else if(clean.contains("Tenth") && clean.contains("Edition"))
 					{
-						Sets.add("10th%20Edition");
+						Sets.add(URLEncoder.encode("10th Edition","UTF-8"));
 					}
-					
 					//Checks to see if the set is a core set or not
 					else if(clean.matches(".*\\d\\d\\d\\d.*"))
 					{
-						Sets.add(coreSet(clean));
+						Sets.add(URLEncoder.encode(coreSet(clean),"UTF-8"));
 					}
 					else
 					{
-						Sets.add(clean);
+						Sets.add(URLEncoder.encode(clean,"UTF-8"));
 					}
 				}
 			}
@@ -389,59 +370,54 @@ public class Constructed
 			{
 				Names.add(item.text());
 				
-				clean = item.text().replaceAll(" ", "%20");
+				clean = item.text();
+				clean = clean.replaceAll("\u00A0", " ");
+				System.out.println(clean);
 				
 				//Further processes the items within found on the site
-				for(int length=0; length<clean.length(); length++)
+				for(int length=0; length < clean.length(); length++)
 				{
 					check=clean.charAt(length);
 					if(check=='(')
 					{
-						clean = clean.substring(0,length-3);
+						clean = clean.substring(0,length-1);
 					}
 				}
 				
 				//Since there is a in-consistancy within the database these two are necessary
-				if(clean.contains("Magic")&&clean.contains("2010"))
-				{
-					Sets.add("Magic%202010%20(M10)");
-				}
-				else if(clean.contains("Magic")&&clean.contains("2015"))
-				{
-					Sets.add("Magic%202015%20(M15)");
-				}
-				else if(clean.contains("Ravnica")&&clean.contains("City"))
+				if(clean.contains("Ravnica") && clean.contains("City"))
 				{
 					Sets.add("Ravnica");
 				}
-				else if(clean.contains("Sixth")&&clean.contains("Edition"))
+				else if(clean.contains("Sixth") && clean.contains("Edition"))
 				{
-					Sets.add("Classic%20Sixth%20Edition");
+					Sets.add(URLEncoder.encode("Classic Sixth Edition","UTF-8"));
 				}
-				else if(clean.contains("Seventh")&&clean.contains("Edition"))
+				else if(clean.contains("Seventh") && clean.contains("Edition"))
 				{
-					Sets.add("7th%20Edition");
+					Sets.add(URLEncoder.encode("7th Edition","UTF-8"));
 				}
-				else if(clean.contains("Eighth")&&clean.contains("Edition"))
+				else if(clean.contains("Eighth") && clean.contains("Edition"))
 				{
-					Sets.add("8th%20Edition");
+					Sets.add(URLEncoder.encode("8th Edition","UTF-8"));
 				}
-				else if(clean.contains("Ninth")&&clean.contains("Edition"))
+				else if(clean.contains("Ninth") && clean.contains("Edition"))
 				{
-					Sets.add("9th%20Edition");
+					Sets.add(URLEncoder.encode("9th Edition","UTF-8"));
 				}
-				else if(clean.contains("Tenth")&&clean.contains("Edition"))
+				else if(clean.contains("Tenth") && clean.contains("Edition"))
 				{
-					Sets.add("10th%20Edition");
+					Sets.add(URLEncoder.encode("10th Edition","UTF-8"));
 				}
 				//Checks to see if the set is a core set or not
 				else if(clean.matches(".*\\d\\d\\d\\d.*"))
 				{
-					Sets.add(coreSet(clean));
+					Sets.add(URLEncoder.encode(coreSet(clean.trim()),"UTF-8"));
 				}
 				else
 				{
-					Sets.add(clean);
+					Sets.add(URLEncoder.encode(clean.trim(),"UTF-8"));
+					System.out.println(URLEncoder.encode(clean.trim(),"UTF-8"));
 				}
 			}
 			
@@ -458,7 +434,11 @@ public class Constructed
 	//If a core set is detected then the name is edited to fit the TCG format
 	private String coreSet(String input)
 	{
-		String output=input+"%20(M"+input.substring(input.length()-2)+")";
+		String sub = input;
+		sub = "(M"+sub.substring(sub.length()-2)+")";
+		
+		String output = input.trim()+" "+sub;
+		
 		return output;
 	}
 	
@@ -466,7 +446,7 @@ public class Constructed
 	{
 		double output=0;
 		boolean found = false;
-		for(int start =0; start<input.length(); start++)
+		for(int start = 0; start < input.length(); start++)
 		{
 			if(input.charAt(start)==',')
 			{
