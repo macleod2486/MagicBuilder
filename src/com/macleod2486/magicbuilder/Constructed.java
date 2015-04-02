@@ -49,7 +49,7 @@ public class Constructed
 							   			//Modern
 							   			"http://magic.wizards.com/en/gameinfo/gameplay/formats/modern"};
 	//Url of all the formats
-	private String allFormat="http://store.tcgplayer.com/magic?partner=WWWTCG";
+	private String allFormat="http://magic.tcgplayer.com/magic_price_guides.asp";
 	private int selection = 4;
 	
 	//Connects to the TCG website to then gather the prices
@@ -128,7 +128,7 @@ public class Constructed
 					clean=item.get(0).text();
 					
 					//Filters out land cards
-					if(!clean.contains("Forest") &&! clean.contains("Mountain") &&! clean.contains("Swamp") &&! clean.contains("Island") &&! clean.contains("Plains") &&! clean.isEmpty())
+					if(!clean.isEmpty())
 					{
 						if(item.get(5).text().length() > 2 && item.get(6).text().length() > 2 && item.get(7).text().length() > 2 )
 						{
@@ -256,7 +256,7 @@ public class Constructed
 		{
 			//Grabs the webpage then selects the list of sets
 			Document page = Jsoup.connect(allFormat).get();
-			Elements article = page.select("div#advancedSearchSets");
+			Elements article = page.select("div.bodyWrap");
 			Elements table = article.select("table");
 			Elements tableBody = table.select("tbody");
 			Elements tableRow = tableBody.select("tr");
@@ -275,16 +275,6 @@ public class Constructed
 					//Replaces all blank characters with the %20 characters 
 					clean = itemName.text();
 					clean = clean.replaceAll("\u00A0", " ");
-					
-					//Further processes the items within found on the site
-					for(int length=0; length<clean.length(); length++)
-					{
-						check=clean.charAt(length);
-						if(check=='(')
-						{
-							clean = clean.substring(0,length-3);
-						}
-					}
 					
 					//Since there is a in-consistancy within the database these are necessary
 					if(clean.contains("PDS") && clean.contains("Fire"))
@@ -326,12 +316,7 @@ public class Constructed
 					else if(clean.contains("Tenth") && clean.contains("Edition"))
 					{
 						Sets.add(URLEncoder.encode("10th Edition","UTF-8"));
-					}
-					//Checks to see if the set is a core set or not
-					else if(clean.matches(".*\\d\\d\\d\\d.*"))
-					{
-						Sets.add(URLEncoder.encode(coreSet(clean),"UTF-8"));
-					}
+					}					
 					else
 					{
 						Sets.add(URLEncoder.encode(clean,"UTF-8"));
