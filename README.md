@@ -13,3 +13,6 @@ Which are added within the libs/ directory
 
 ### Currently supported sites
 * TCGPlayer
+
+
+### Since TCGPlayer has turned off screenscaping on their site TCGPlayer will no longer be supported.  If a new site is to be targeted then this projected will be updated accordingly.
